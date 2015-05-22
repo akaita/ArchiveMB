@@ -12,8 +12,10 @@ import android.widget.Toast;
 
 import com.akaita.fda.database.Artist;
 import com.akaita.fda.database.DaoFactory;
+import com.akaita.fda.database.RangedQuery;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
@@ -22,11 +24,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
 
     public ArtistAdapter(Context context) {
         this.mContext = context;
-        try {
-            artistList = DaoFactory.getInstance().getArtists().queryForAll();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        artistList = new ArrayList<>();
     }
 
     @Override
@@ -66,9 +64,11 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
         notifyItemRemoved(position);
     }
 
-
-
-
-
+    public void loadMore(int range) throws SQLException {
+        List<Artist> newArtistList = RangedQuery.getArtistRange(getItemCount(), range);
+        for (Artist artist : newArtistList){
+            add(artist, getItemCount());
+        }
+    }
 
 }
