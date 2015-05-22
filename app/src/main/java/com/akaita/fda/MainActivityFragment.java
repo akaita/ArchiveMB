@@ -48,13 +48,12 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
-                int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
                 int totalItemCount = recyclerView.getLayoutManager().getItemCount();
-                int[] pastVisiblesItems = ((StaggeredGridLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPositions(null);
+                int[] lastVisiblesItems = ((StaggeredGridLayoutManager)recyclerView.getLayoutManager()).findLastVisibleItemPositions(null);
 
                 boolean loading = true;
                 if (loading) {
-                    if ((visibleItemCount + pastVisiblesItems[0] + COLUMNS) >= totalItemCount) {
+                    if ((lastVisiblesItems[0] + COLUMNS) >= totalItemCount) {
                         loading = false;
                         Log.e("...", "Last Item Wow !");
                     }
