@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.akaita.fda.database.Artist;
-import com.akaita.fda.database.DaoFactory;
 import com.akaita.fda.database.RangedQuery;
 
 import java.sql.SQLException;
@@ -29,14 +28,14 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
 
     @Override
     public ArtistThumbViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.artist_thumb, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.artist_thumb_full, parent, false);
         return new ArtistThumbViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ArtistThumbViewHolder holder, final int position) {
         holder.nameView.setText(artistList.get(position).name);
-        holder.nameView.setOnClickListener(new View.OnClickListener() {
+        holder.rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(
