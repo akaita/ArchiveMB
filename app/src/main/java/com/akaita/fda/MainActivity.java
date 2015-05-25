@@ -6,12 +6,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.akaita.fda.database.Artist;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
 
-public class MainActivity extends AppCompatActivity implements UpdateDatabaseTask.UpdateDatabaseResponse {
+public class MainActivity extends AppCompatActivity implements UpdateDatabaseTask.UpdateDatabaseResponse, MainActivityFragment.OnArtistSelectedListener {
     private final static String URL_1 = "http://i.img.co/data/data.json";
 
     @Override
@@ -64,5 +67,10 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
     private void showProgressBar(boolean show) {
         ProgressBar progressBar = ((ProgressBar) findViewById(R.id.progressBar));
         progressBar.setVisibility(show?View.VISIBLE:View.INVISIBLE);
+    }
+
+    @Override
+    public void onArtistSelected(Artist artist) {
+        Toast.makeText(this, artist.name, Toast.LENGTH_SHORT).show();
     }
 }

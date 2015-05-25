@@ -1,7 +1,8 @@
 package com.akaita.fda;
 
-import android.support.v4.app.Fragment;
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -9,21 +10,45 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.akaita.fda.database.Artist;
+import com.akaita.fda.database.RangedQuery;
+
 import java.sql.SQLException;
+import java.util.List;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements ArtistAdapter.OnArtistItemSelectedListener{
 
     final static int COLUMNS = 2;
     final static int PAGE_SIZE = 10;
+
+    OnArtistSelectedListener mCallback;
 
     private View mView;
     private ArtistAdapter artistAdapter;
 
     public MainActivityFragment() {
+    }
+
+    public interface OnArtistSelectedListener {
+        public void onArtistSelected(Artist artist);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mCallback = (OnArtistSelectedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnArtistSelectedListener");
+        }
     }
 
     @Override
@@ -32,6 +57,7 @@ public class MainActivityFragment extends Fragment {
         this.mView = inflater.inflate(R.layout.fragment_main, container, false);
 
         this.artistAdapter = new ArtistAdapter(getActivity());
+        this.artistAdapter.setOnArtistItemSelectedListener(this);
 
         prepareGridRecyclerView();
         loadFirstItemBatch();
@@ -57,7 +83,7 @@ public class MainActivityFragment extends Fragment {
                 int totalItemCount = recyclerView.getLayoutManager().getItemCount();
                 int[] lastVisiblesItems = ((StaggeredGridLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPositions(null);
 
-                if ((lastVisiblesItems[0] + COLUMNS) >= totalItemCount) {
+                if ((JavaUtils.findMax(lastVisiblesItems) + 1) == totalItemCount) {
                     loadMoreItems();
                     Log.e("temp", "last element");
                 }
@@ -70,10 +96,20 @@ public class MainActivityFragment extends Fragment {
     }
 
     private void loadMoreItems() {
+        List<Artist> newArtistList = null;
         try {
-            artistAdapter.loadMore(PAGE_SIZE);
+            newArtistList = RangedQuery.getArtistRange(artistAdapter.getItemCount(), PAGE_SIZE);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        for (Artist artist : newArtistList){
+            artistAdapter.add(artist, artistAdapter.getItemCount());
+        }
     }
+
+    @Override
+    public void onArtistItemSelected(Artist artist) {
+        mCallback.onArtistSelected(artist);
+    }
+
 }
