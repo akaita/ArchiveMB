@@ -25,15 +25,26 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Small Text"
-            android:id="@+id/artistName"
-            android:autoText="false"
-            style="@style/Base.TextAppearance.AppCompat.Medium.Inverse"
+            android:textAppearance="?android:attr/textAppearanceSmallInverse"
+            android:text="Medium Text"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:background="#C222"
+            android:id="@+id/artistGenres"
             android:padding="5dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmallInverse"
+            android:text="Small Text"
+            android:id="@+id/artistName"
+            android:autoText="false"
+            android:background="#C222"
+            android:padding="5dp"
+            android:layout_alignParentLeft="true"
+            android:layout_above="@+id/artistGenres" />
+
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

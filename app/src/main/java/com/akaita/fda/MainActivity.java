@@ -1,5 +1,6 @@
 package com.akaita.fda;
 
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
+        showFragmentArtists();
     }
 
 
@@ -62,15 +65,53 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
     @Override
     public void updateDatabaseFinish() {
         showProgressBar(false);
+        showFragmentArtists();
     }
 
     private void showProgressBar(boolean show) {
         ProgressBar progressBar = ((ProgressBar) findViewById(R.id.progressBar));
-        progressBar.setVisibility(show?View.VISIBLE:View.INVISIBLE);
+        progressBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
     public void onArtistSelected(Artist artist) {
         Toast.makeText(this, artist.name, Toast.LENGTH_SHORT).show();
+        showFragmentAlbum(artist);
+    }
+
+    private void showFragmentArtists() {
+        // Create new fragment and transaction
+        MainActivityFragment newFragment = new MainActivityFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+
+// Replace whatever is in the fragment_container view with this fragment,
+// and add the transaction to the back stack if needed
+        transaction.replace(R.id.fragment, newFragment);
+        //transaction.addToBackStack(null);
+
+// Commit the transaction
+        transaction.commit();
+    }
+
+    private void showFragmentAlbum(Artist artist) {
+        Bundle bundl = new Bundle();
+        bundl.putLong(AlbumFragment.ARTIST_ID, artist.id);
+
+        // Create new fragment and transaction
+        AlbumFragment newFragment = new AlbumFragment();
+        newFragment.setArguments(bundl);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+
+// Replace whatever is in the fragment_container view with this fragment,
+// and add the transaction to the back stack if needed
+        transaction.replace(R.id.fragment, newFragment);
+        transaction.addToBackStack(null);
+
+// Commit the transaction
+        transaction.commit();
     }
 }
