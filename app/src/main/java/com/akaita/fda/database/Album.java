@@ -19,10 +19,10 @@ public class Album {
     long id;
 
     @DatabaseField
-    String title;
+    public String title;
 
     @DatabaseField
-    String pictureUrl;
+    public String pictureUrl;
 
     @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = TYPE_ID_FIELD_NAME)
     Type type;

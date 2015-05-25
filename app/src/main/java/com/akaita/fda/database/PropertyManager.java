@@ -27,7 +27,7 @@ public class PropertyManager {
 
     public static void setLastModifiedDate(long date) throws SQLException {
         Property property = new Property(LAST_MODIFIED_DATE, String.valueOf(date));
-        Dao<Property, Integer> propertyDao = DaoFactory.getInstance().getProperties();
+        Dao<Property, String> propertyDao = DaoFactory.getInstance().getProperties();
         propertyDao.createIfNotExists(property);
     }
 
@@ -37,15 +37,15 @@ public class PropertyManager {
             propertyPreparedQuery = createPropertyPreparedQuery();
         }
         propertyPreparedQuery.setArgumentHolderValue(0, propertyName);
-        Dao<Property, Integer> propertyDao = DaoFactory.getInstance().getProperties();
+        Dao<Property, String> propertyDao = DaoFactory.getInstance().getProperties();
         List<Property> propertyList = propertyDao.query(propertyPreparedQuery);
         return propertyList.isEmpty()?null:propertyList.get(0);
     }
 
     private static PreparedQuery<Property> createPropertyPreparedQuery() throws SQLException {
-        Dao<Property, Integer> propertyDao = DaoFactory.getInstance().getProperties();
+        Dao<Property, String> propertyDao = DaoFactory.getInstance().getProperties();
         // build our inner query for UserPost objects
-        QueryBuilder<Property, Integer> propertyQb = propertyDao.queryBuilder();
+        QueryBuilder<Property, String> propertyQb = propertyDao.queryBuilder();
         // just select the post-id field
         SelectArg propertySelectArg = new SelectArg();
         // you could also just pass in user1 here

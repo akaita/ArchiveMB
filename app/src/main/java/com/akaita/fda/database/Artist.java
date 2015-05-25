@@ -28,11 +28,10 @@ public class Artist {
     public String name;
 
     @DatabaseField
-    String description;
+    public String description;
 
     @DatabaseField
-    public
-    String pictureUrl;
+    public String pictureUrl;
 
     Artist() {
         // for ormlite
@@ -58,7 +57,7 @@ public class Artist {
             albumPreparedQuery = createAlbumPreparedQuery();
         }
         albumPreparedQuery.setArgumentHolderValue(0, this);
-        Dao<Album, Integer> albumDao = DaoFactory.getInstance().getAlbums();
+        Dao<Album, Long> albumDao = DaoFactory.getInstance().getAlbums();
         return albumDao.query(albumPreparedQuery);
     }
 
@@ -67,7 +66,7 @@ public class Artist {
             genrePreparedQuery = createGenrePreparedQuery();
         }
         genrePreparedQuery.setArgumentHolderValue(0, this);
-        Dao<Genre, Integer> genreDao = DaoFactory.getInstance().getGenres();
+        Dao<Genre, String> genreDao = DaoFactory.getInstance().getGenres();
         return genreDao.query(genrePreparedQuery);
     }
 
@@ -81,9 +80,9 @@ public class Artist {
         // you could also just pass in user1 here
         artistAlbumQb.where().eq(ArtistAlbum.ARTIST_ID_FIELD_NAME, artistSelectArg);
 
-        Dao<Album, Integer> albumDao = DaoFactory.getInstance().getAlbums();
+        Dao<Album, Long> albumDao = DaoFactory.getInstance().getAlbums();
         // build our outer query for Post objects
-        QueryBuilder<Album, Integer> albumQb = albumDao.queryBuilder();
+        QueryBuilder<Album, Long> albumQb = albumDao.queryBuilder();
         // where the id matches in the post-id from the inner query
         albumQb.where().in(Album.ID_FIELD_NAME, artistAlbumQb);
         return albumQb.prepare();
@@ -99,9 +98,9 @@ public class Artist {
         // you could also just pass in user1 here
         artistGenreQb.where().eq(ArtistGenre.ARTIST_ID_FIELD_NAME, artistSelectArg);
 
-        Dao<Genre, Integer> genreDao = DaoFactory.getInstance().getGenres();
+        Dao<Genre, String> genreDao = DaoFactory.getInstance().getGenres();
         // build our outer query for Post objects
-        QueryBuilder<Genre, Integer> genreQb = genreDao.queryBuilder();
+        QueryBuilder<Genre, String> genreQb = genreDao.queryBuilder();
         // where the id matches in the post-id from the inner query
         genreQb.where().in(Genre.ID_FIELD_NAME, artistGenreQb);
         return genreQb.prepare();

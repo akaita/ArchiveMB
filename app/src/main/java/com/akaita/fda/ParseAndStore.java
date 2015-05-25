@@ -25,12 +25,12 @@ public class ParseAndStore {
 
     JsonReader jsonReader;
     DatabaseConnection dbConn;
-    Dao<Album, Integer> albumDao;
+    Dao<Album, Long> albumDao;
     Dao<ArtistAlbum, Integer> artistAlbumDao;
     Dao<ArtistGenre, Integer> artistGenreDao;
-    Dao<Artist, Integer> artistDao;
-    Dao<Genre, Integer> genreDao;
-    Dao<Type, Integer> typeDao;
+    Dao<Artist, Long> artistDao;
+    Dao<Genre, String> genreDao;
+    Dao<Type, String> typeDao;
 
     public ParseAndStore(InputStreamReader streamReader) {
         this.jsonReader = new JsonReader(streamReader);

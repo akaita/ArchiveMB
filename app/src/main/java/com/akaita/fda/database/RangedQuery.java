@@ -14,14 +14,14 @@ import java.util.List;
 public class RangedQuery {
     public static List<Artist> getArtistRange(long offset, long range) throws SQLException {
         PreparedQuery<Artist> artistRangePreparedQuery = createArtistRangePreparedQuery(offset, range);
-        Dao<Artist, Integer> artistDao = DaoFactory.getInstance().getArtists();
+        Dao<Artist, Long> artistDao = DaoFactory.getInstance().getArtists();
         return artistDao.query(artistRangePreparedQuery);
     }
 
     private static PreparedQuery<Artist> createArtistRangePreparedQuery(long offset, long range) throws SQLException {
-        Dao<Artist, Integer> artistDao = DaoFactory.getInstance().getArtists();
+        Dao<Artist, Long> artistDao = DaoFactory.getInstance().getArtists();
         // build our inner query for UserPost objects
-        QueryBuilder<Artist, Integer> artistQb = artistDao.queryBuilder();
+        QueryBuilder<Artist, Long> artistQb = artistDao.queryBuilder();
         artistQb.offset(offset);
         artistQb.limit(range);
         return artistQb.prepare();

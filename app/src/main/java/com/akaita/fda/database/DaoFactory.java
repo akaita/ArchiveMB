@@ -13,13 +13,13 @@ import java.sql.SQLException;
 public class DaoFactory extends Application {
     private DatabaseHelper databaseHelper = null;
 
-    private Dao<Artist, Integer> artists = null;
+    private Dao<Artist, Long> artists = null;
     private Dao<ArtistAlbum, Integer> artistAlbum = null;
     private Dao<ArtistGenre, Integer> artistGenre = null;
-    private Dao<Genre, Integer> genres = null;
-    private Dao<Album, Integer> albums = null;
-    private Dao<Type, Integer> types = null;
-    private Dao<Property, Integer> properties = null;
+    private Dao<Genre, String> genres = null;
+    private Dao<Album, Long> albums = null;
+    private Dao<Type, String> types = null;
+    private Dao<Property, String> properties = null;
 
     private static DaoFactory instance = null;
 
@@ -34,7 +34,7 @@ public class DaoFactory extends Application {
         return instance;
     }
 
-    public Dao<Artist, Integer> getArtists() throws SQLException {
+    public Dao<Artist, Long> getArtists() throws SQLException {
         if (artists == null) {
             artists = databaseHelper.getDao(Artist.class);
         }
@@ -55,28 +55,28 @@ public class DaoFactory extends Application {
         return artistGenre;
     }
 
-    public Dao<Genre, Integer> getGenres() throws SQLException {
+    public Dao<Genre, String> getGenres() throws SQLException {
         if (genres == null) {
             genres = databaseHelper.getDao(Genre.class);
         }
         return genres;
     }
 
-    public Dao<Album, Integer> getAlbums() throws SQLException {
+    public Dao<Album, Long> getAlbums() throws SQLException {
         if (albums == null) {
             albums = databaseHelper.getDao(Album.class);
         }
         return albums;
     }
 
-    public Dao<Type, Integer> getTypes() throws SQLException {
+    public Dao<Type, String> getTypes() throws SQLException {
         if (types == null) {
             types = databaseHelper.getDao(Type.class);
         }
         return types;
     }
 
-    public Dao<Property, Integer> getProperties() throws SQLException {
+    public Dao<Property, String> getProperties() throws SQLException {
         if (properties == null) {
             properties = databaseHelper.getDao(Property.class);
         }

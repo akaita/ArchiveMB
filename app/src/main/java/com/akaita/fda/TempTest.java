@@ -34,8 +34,8 @@ public class TempTest {
 
     private static void testDatabase() throws SQLException {
         DaoFactory factory = DaoFactory.getInstance();
-        Dao<Artist, Integer> artist = factory.getArtists();
-        Dao<Album, Integer> album = factory.getAlbums();
+        Dao<Artist, Long> artist = factory.getArtists();
+        Dao<Album, Long> album = factory.getAlbums();
         Dao<ArtistAlbum, Integer> artistAlbum = factory.getArtistAlbum();
 
         Type type1 = new Type("type1");
