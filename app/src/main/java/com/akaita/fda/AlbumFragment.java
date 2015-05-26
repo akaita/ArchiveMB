@@ -78,7 +78,7 @@ public class AlbumFragment extends Fragment {
     }
 
     private void addDescription() {
-        addtitle("Description");
+        addtitle(getResources().getString(R.string.artist_details_descrition));
 
         View text = getActivity().getLayoutInflater().inflate(R.layout.list_text, this.mLinearLayout, false);
         ((TextView)text.findViewById(R.id.textText)).setText(Html.fromHtml(this.artist.description));
@@ -89,7 +89,7 @@ public class AlbumFragment extends Fragment {
         try {
             List<Album> albumList = artist.albums();
             if (!albumList.isEmpty()) {
-                addtitle("Albums");
+                addtitle(getResources().getString(R.string.album_list_title));
             }
             for (Album album : albumList){
                 addAlbum(album);

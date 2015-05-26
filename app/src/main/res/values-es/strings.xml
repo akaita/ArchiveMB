@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FDA</string>
+    <string name="artist_details_descrition">Descripción</string>
+    <string name="album_list_title">Discos</string>
+    <string name="action_settings">Configuración</string>
+</resources>
