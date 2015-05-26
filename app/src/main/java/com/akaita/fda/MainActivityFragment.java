@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class MainActivityFragment extends Fragment implements ArtistAdapter.OnArtistItemSelectedListener{
 
-    final static int COLUMNS = 2;
+    final static float COLUMN_SIZE_INCHES = 1;
     final static int PAGE_SIZE = 10;
 
     OnArtistSelectedListener mCallback;
@@ -73,7 +73,9 @@ public class MainActivityFragment extends Fragment implements ArtistAdapter.OnAr
 
         // recyclerView.addItemDecoration(new MarginDecoration(this));
 
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(COLUMNS, StaggeredGridLayoutManager.VERTICAL));
+        int columns = JavaUtils.getColumns(getActivity(), 1);
+
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(columns, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setAdapter(this.artistAdapter);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
