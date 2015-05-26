@@ -2,10 +2,15 @@ package com.akaita.fda;
 
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -22,9 +27,6 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.mipmap.ic_launcher);
 
         TempTest.testStoredData();
 
@@ -54,9 +56,12 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                break;
+            case android.R.id.home:
+                showFragmentArtists();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -80,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
     }
 
     private void showFragmentArtists() {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
         // Create new fragment and transaction
         MainActivityFragment newFragment = new MainActivityFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -96,6 +103,8 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
     }
 
     private void showFragmentAlbum(Artist artist) {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Bundle bundl = new Bundle();
         bundl.putLong(AlbumFragment.ARTIST_ID, artist.id);
 
