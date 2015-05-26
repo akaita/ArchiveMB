@@ -98,7 +98,7 @@ public class AlbumFragment extends Fragment {
                 if (mHeader != null) {
                     float tx = mHeader.getX();
                     float ty = mHeader.getY();
-                    Log.d("temp", "translation X:" + String.valueOf(tx) + " Y:" + String.valueOf(ty));
+                    Log.d("TODO", "translation X:" + String.valueOf(tx) + " Y:" + String.valueOf(ty));
                     //TODO add some kinf of parallax effect
                 }
             }
