@@ -78,7 +78,6 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
         notifyItemRemoved(position);
     }
 
-
     public static String concatenate(List<Genre> list, String separator) {
         StringBuffer result = new StringBuffer();
         for (Genre genre : list) {
@@ -87,5 +86,4 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
         }
         return result.delete(result.length()-separator.length(), result.length()).toString();
     }
-
 }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.akaita.fda.database.Album;
 import com.akaita.fda.database.Artist;
 import com.akaita.fda.database.DaoFactory;
+import com.akaita.fda.database.Genre;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -22,10 +24,12 @@ import java.util.List;
  */
 public class AlbumFragment extends Fragment {
     public static final String ARTIST_ID = "artistId";
+    private final static String SEPARATOR = " ";
 
     private Artist artist;
     private AlbumAdapter albumAdapter;
     private View mView;
+    private View mHeader;
 
     public AlbumFragment() {
     }
@@ -38,14 +42,26 @@ public class AlbumFragment extends Fragment {
         this.artist = getChosenArtist();
         this.albumAdapter = new AlbumAdapter(getActivity());
 
+        addAlbumHeader();
         prepareGridRecyclerView();
         loadItems();
 
-        SetImage.setImage(getActivity(), (ImageView) mView.findViewById(R.id.albumImage), artist.pictureUrl);
-        ((TextView)mView.findViewById(R.id.artistName)).setText(artist.name);
-        ((TextView)mView.findViewById(R.id.artistDescription)).setText(artist.description);
 
         return this.mView;
+    }
+
+    private void addAlbumHeader() {
+        this.mHeader = getActivity().getLayoutInflater().inflate(R.layout.artist_details, null, false);
+        SetImage.setImage(getActivity(), (ImageView) mHeader.findViewById(R.id.albumImage), this.artist.pictureUrl);
+        ((TextView)mHeader.findViewById(R.id.artistName)).setText(artist.name);
+        try {
+            List<Genre> genreList = this.artist.genres();
+            ((TextView) mHeader.findViewById(R.id.artistGenres)).setText(concatenate(genreList, SEPARATOR));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        ((TextView)mHeader.findViewById(R.id.artistDescription)).setText(Html.fromHtml(this.artist.description));
+        this.albumAdapter.addHeader(mHeader);
     }
 
     private Artist getChosenArtist() {
@@ -81,5 +97,14 @@ public class AlbumFragment extends Fragment {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String concatenate(List<Genre> list, String separator) {
+        StringBuffer result = new StringBuffer();
+        for (Genre genre : list) {
+            result.append( genre.name );
+            result.append( separator );
+        }
+        return result.delete(result.length()-separator.length(), result.length()).toString();
     }
 }
