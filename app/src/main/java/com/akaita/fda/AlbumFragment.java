@@ -1,19 +1,13 @@
 package com.akaita.fda;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewPropertyAnimator;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.akaita.fda.database.Album;
@@ -32,9 +26,8 @@ public class AlbumFragment extends Fragment {
     private final static String SEPARATOR = " ";
 
     private Artist artist;
-    private AlbumAdapter albumAdapter;
     private View mView;
-    private View mHeader;
+    private LinearLayout mLinearLayout;
 
     public AlbumFragment() {
     }
@@ -43,30 +36,16 @@ public class AlbumFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.mView = inflater.inflate(R.layout.fragment_album, container, false);
+        this.mLinearLayout = (LinearLayout) mView.findViewById(R.id.linearLayout);
 
         this.artist = getChosenArtist();
-        this.albumAdapter = new AlbumAdapter(getActivity());
 
-        addAlbumHeader();
-        prepareGridRecyclerView();
-        loadItems();
+        addHeader();
+        addDescription();
+        addAlbums();
 
 
         return this.mView;
-    }
-
-    private void addAlbumHeader() {
-        this.mHeader = getActivity().getLayoutInflater().inflate(R.layout.artist_details, null, false);
-        SetImage.setImage(getActivity(), (ImageView) mHeader.findViewById(R.id.albumImage), this.artist.pictureUrl);
-        ((TextView)mHeader.findViewById(R.id.artistName)).setText(artist.name);
-        try {
-            List<Genre> genreList = this.artist.genres();
-            ((TextView) mHeader.findViewById(R.id.artistGenres)).setText(concatenate(genreList, SEPARATOR));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        ((TextView)mHeader.findViewById(R.id.artistDescription)).setText(Html.fromHtml(this.artist.description));
-        this.albumAdapter.addHeader(mHeader);
     }
 
     private Artist getChosenArtist() {
@@ -80,42 +59,54 @@ public class AlbumFragment extends Fragment {
         }
         return artist;
     }
-    private void prepareGridRecyclerView(){
-        RecyclerView recyclerView = (RecyclerView) mView.findViewById(R.id.recyclerView);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerVie
-        recyclerView.setHasFixedSize(true);
+    private void addHeader() {
+        View header = getActivity().getLayoutInflater().inflate(R.layout.artist_details, this.mLinearLayout, false);
+        SetImage.setImage(getActivity(), (ImageView) header.findViewById(R.id.artistImage), this.artist.pictureUrl);
+        ((TextView)header.findViewById(R.id.artistName)).setText(artist.name);
+        try {
+            List<Genre> genreList = this.artist.genres();
+            ((TextView) header.findViewById(R.id.artistGenres)).setText(concatenate(genreList, SEPARATOR));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        // recyclerView.addItemDecoration(new MarginDecoration(this));
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (mHeader != null) {
-                    float tx = mHeader.getX();
-                    float ty = mHeader.getY();
-                    Log.d("TODO", "translation X:" + String.valueOf(tx) + " Y:" + String.valueOf(ty));
-                    //TODO add some kinf of parallax effect
-                }
-            }
-        });
-        
-        recyclerView.setAdapter(this.albumAdapter);
+        this.mLinearLayout.addView(header);
     }
 
-    private void loadItems() {
+    private void addDescription() {
+        addtitle("Description");
+
+        View text = getActivity().getLayoutInflater().inflate(R.layout.list_text, this.mLinearLayout, false);
+        ((TextView)text.findViewById(R.id.textText)).setText(Html.fromHtml(this.artist.description));
+        this.mLinearLayout.addView(text);
+    }
+
+    private void addAlbums() {
         try {
             List<Album> albumList = artist.albums();
+            if (!albumList.isEmpty()) {
+                addtitle("Albums");
+            }
             for (Album album : albumList){
-                albumAdapter.add(album, albumAdapter.getItemCount());
+                addAlbum(album);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void addAlbum(Album album) {
+        View albumView = getActivity().getLayoutInflater().inflate(R.layout.album_thumb_card, this.mLinearLayout, false);
+        SetImage.setImage(getActivity(), (ImageView) albumView.findViewById(R.id.albumImage), album.pictureUrl);
+        ((TextView)albumView.findViewById(R.id.albumName)).setText(album.title);
+        this.mLinearLayout.addView(albumView);
+    }
+
+    private void addtitle(String titleText) {
+        View title = getActivity().getLayoutInflater().inflate(R.layout.list_title, null, false);
+        ((TextView)title.findViewById(R.id.titleText)).setText(titleText);
+        this.mLinearLayout.addView(title);
     }
 
     public static String concatenate(List<Genre> list, String separator) {
