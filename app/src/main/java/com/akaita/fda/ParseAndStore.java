@@ -129,11 +129,11 @@ public class ParseAndStore {
             } else if (innerInnerName.equals("genres") && !isInnerInnerNull) {
                 genres = this.jsonReader.nextString().split(",");
             } else if (innerInnerName.equals("picture") && !isInnerInnerNull) {
-                pictureUrl = this.jsonReader.nextString();
+                pictureUrl = this.jsonReader.nextString().trim();
             } else if (innerInnerName.equals("name") && !isInnerInnerNull) {
-                name = this.jsonReader.nextString();
+                name = this.jsonReader.nextString().trim();
             } else if (innerInnerName.equals("description") && !isInnerInnerNull) {
-                description = this.jsonReader.nextString();
+                description = this.jsonReader.nextString().trim();
             } else {
                 this.jsonReader.skipValue();
             }
@@ -158,11 +158,11 @@ public class ParseAndStore {
             } else if (innerInnerName.equals("artistId") && !isInnerInnerNull) {
                 artistId = this.jsonReader.nextLong();
             } else if (innerInnerName.equals("title") && !isInnerInnerNull) {
-                title = this.jsonReader.nextString();
+                title = this.jsonReader.nextString().trim();
             } else if (innerInnerName.equals("type") && !isInnerInnerNull) {
-                typeStr = this.jsonReader.nextString();
+                typeStr = this.jsonReader.nextString().trim();
             } else if (innerInnerName.equals("picture") && !isInnerInnerNull) {
-                pictureUrl = this.jsonReader.nextString();
+                pictureUrl = this.jsonReader.nextString().trim();
             } else {
                 this.jsonReader.skipValue();
             }
@@ -177,7 +177,7 @@ public class ParseAndStore {
         this.artistDao.createIfNotExists(artist);
 
         for (String genreString : genres) {
-            Genre genre = new Genre(genreString);
+            Genre genre = new Genre(genreString.trim());
             this.genreDao.createIfNotExists(genre);
 
             ArtistGenre artistGenre = new ArtistGenre(artist, genre);
