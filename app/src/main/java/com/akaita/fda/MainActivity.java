@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
 
     @Override
     public void onArtistSelected(Artist artist) {
-        Toast.makeText(this, artist.name, Toast.LENGTH_SHORT).show();
         showFragmentAlbum(artist);
     }
 
