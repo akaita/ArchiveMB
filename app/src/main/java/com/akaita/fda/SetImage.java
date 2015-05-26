@@ -38,7 +38,7 @@ public class SetImage {
                 Picasso.with(context).load(url)
                         .placeholder(R.mipmap.ic_launcher)
                         .error(R.mipmap.ic_launcher)
-                        .resize(150,
+                        .resize(context.getResources().getInteger(R.integer.caches_artist_thumb_big),
                                 0)
                         .into(imageView, new Callback() {
                             @Override
