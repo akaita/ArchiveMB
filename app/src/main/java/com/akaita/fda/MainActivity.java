@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
             case R.id.action_settings:
                 break;
             case android.R.id.home:
-                showFragmentArtists();
+                onBackPressed();
                 return true;
         }
 
@@ -84,8 +84,6 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
     }
 
     private void showFragmentArtists() {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-
         // Create new fragment and transaction
         MainActivityFragment newFragment = new MainActivityFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

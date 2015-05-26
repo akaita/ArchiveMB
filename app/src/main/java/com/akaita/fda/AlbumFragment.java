@@ -2,6 +2,7 @@ package com.akaita.fda;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,8 @@ public class AlbumFragment extends Fragment {
         this.mLinearLayout = (LinearLayout) mView.findViewById(R.id.linearLayout);
 
         this.artist = getChosenArtist();
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         addHeader();
         addDescription();
@@ -116,5 +119,11 @@ public class AlbumFragment extends Fragment {
             result.append( separator );
         }
         return result.delete(result.length()-separator.length(), result.length()).toString();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 }
