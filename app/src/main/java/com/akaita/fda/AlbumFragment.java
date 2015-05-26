@@ -1,13 +1,18 @@
 package com.akaita.fda;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -85,6 +90,20 @@ public class AlbumFragment extends Fragment {
         // recyclerView.addItemDecoration(new MarginDecoration(this));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (mHeader != null) {
+                    float tx = mHeader.getX();
+                    float ty = mHeader.getY();
+                    Log.d("temp", "translation X:" + String.valueOf(tx) + " Y:" + String.valueOf(ty));
+                    //TODO add some kinf of parallax effect
+                }
+            }
+        });
+        
         recyclerView.setAdapter(this.albumAdapter);
     }
 
