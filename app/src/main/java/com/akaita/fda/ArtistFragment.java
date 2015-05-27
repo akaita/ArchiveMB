@@ -96,9 +96,9 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
                 int totalItemCount = recyclerView.getLayoutManager().getItemCount();
-                int[] lastVisiblesItems = ((StaggeredGridLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPositions(null);
+                int[] lastVisibleItem = ((StaggeredGridLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPositions(null);
 
-                if ((JavaUtils.findMax(lastVisiblesItems) + 1) == totalItemCount) {
+                if ((JavaUtils.findMax(lastVisibleItem) + 1) == totalItemCount) {
                     loadMoreItems();
                 }
             }
