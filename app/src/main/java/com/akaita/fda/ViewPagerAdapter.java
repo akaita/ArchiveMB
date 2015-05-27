@@ -8,9 +8,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     private String mNames[];
 
-    public ViewPagerAdapter(FragmentManager fm, String mTitles[]) {
+    public ViewPagerAdapter(FragmentManager fm, String names[]) {
         super(fm);
-        this.mNames = mTitles;
+        this.mNames = names;
     }
 
     @Override
@@ -41,5 +41,9 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return this.mNames.length;
+    }
+
+    public void updateNames(String[] names) {
+        this.mNames = names;
     }
 }

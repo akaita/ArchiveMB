@@ -72,11 +72,15 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
         notifyItemInserted(position);
     }
 
-    public void remove(Artist item) {
-        //TODO check whether Artist comparison works or not
-        int position = artistList.indexOf(item);
+    public void remove(int position) {
         artistList.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void removeAll() {
+        for (int i=0 ; i<this.artistList.size() ; i++){
+            remove(i);
+        }
     }
 
     public static String concatenate(List<Genre> list, String separator) {

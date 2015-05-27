@@ -16,19 +16,19 @@ import java.util.logging.Logger;
 /**
  * Created by mikel on 20/05/2015.
  */
-public class UpdateDatabaseTask extends AsyncTask<URL, Integer, Long> {
-    public UpdateDatabaseResponse delegate;
+public class UpdateDatabaseTask extends AsyncTask<URL, Integer, Boolean> {
+    public OnUpdateDatabaseFinishListener delegate;
 
-    public UpdateDatabaseTask (UpdateDatabaseResponse updateDatabaseResponse){
-        this.delegate = updateDatabaseResponse;
+    public UpdateDatabaseTask (OnUpdateDatabaseFinishListener onUpdateDatabaseFinishListener){
+        this.delegate = onUpdateDatabaseFinishListener;
     }
 
-    protected Long doInBackground(URL... urls) {
+    protected Boolean doInBackground(URL... urls) {
+        boolean updatesHappened = false;
         int count = urls.length;
-        long totalSize = 0;
         for (int i = 0; i < count; i++) {
             try {
-                updateData(urls[i]);
+                updatesHappened = updatesHappened || updateData(urls[i]);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -36,22 +36,30 @@ public class UpdateDatabaseTask extends AsyncTask<URL, Integer, Long> {
             // Escape early if cancel() is called
             if (isCancelled()) break;
         }
-        return totalSize;
+        return updatesHappened;
     }
 
     protected void onProgressUpdate(Integer... progress) {
         Logger.getLogger(getClass().getName()).log(Level.INFO, "Progress " + progress[0]);
     }
 
-    protected void onPostExecute(Long result) {
-        Logger.getLogger(getClass().getName()).log(Level.INFO, "Downloaded " + result + " URL");
-        delegate.updateDatabaseFinish();
+    protected void onPostExecute(Boolean result) {
+        Logger.getLogger(getClass().getName()).log(Level.INFO, result?"New data downloaded":"No new data to download");
+        delegate.onUpdateDatabaseFinish(result);
     }
 
-    public boolean updateData(URL u) throws SQLException {
+    /**
+     * Check provided URL and try to update the data stored in the database<br>
+     * Data won't be update if the content of the URL hasn't changed since the last update
+     *
+     * @param url
+     * @return true when data updated, false when data not updated
+     * @throws SQLException
+     */
+    private boolean updateData(URL url) throws SQLException {
         HttpURLConnection c = null;
         try {
-            c = (HttpURLConnection) u.openConnection();
+            c = (HttpURLConnection) url.openConnection();
             c.setRequestMethod("GET");
             c.setRequestProperty("Content-length", "0");
             c.setUseCaches(false);
@@ -98,7 +106,7 @@ public class UpdateDatabaseTask extends AsyncTask<URL, Integer, Long> {
         }
     }
 
-    public interface UpdateDatabaseResponse {
-        void updateDatabaseFinish();
+    public interface OnUpdateDatabaseFinishListener {
+        void onUpdateDatabaseFinish(boolean newData);
     }
 }

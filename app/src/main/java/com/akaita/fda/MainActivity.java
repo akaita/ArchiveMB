@@ -14,8 +14,10 @@ import com.akaita.fda.update.UpdateDatabaseTask;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity implements UpdateDatabaseTask.UpdateDatabaseResponse, ArtistFragment.OnArtistSelectedListener {
+public class MainActivity extends AppCompatActivity implements UpdateDatabaseTask.OnUpdateDatabaseFinishListener, ArtistFragment.OnArtistSelectedListener, ArtistFragment.OnArtistListUpdatedListener {
     public static final String URL_1 = "http://i.img.co/data/data.json";
+    public static final String TAG_MAIN_FRAGMENT = "main_fragment";
+    public static final String TAG_ALBUM_FRAGMENT = "album_fragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
         try {
             URL url1 = new URL(URL_1);
             showProgressBar(true);
-            new UpdateDatabaseTask(this).execute(url1);
+           // new UpdateDatabaseTask(this).execute(url1);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
     }
 
     @Override
-    public void updateDatabaseFinish() {
+    public void onUpdateDatabaseFinish(boolean newData) {
         showProgressBar(false);
         showFragmentArtists();
     }
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
 
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack if needed
-        transaction.replace(R.id.fragment, newFragment);
+        transaction.replace(R.id.fragment, newFragment, TAG_MAIN_FRAGMENT);
         //transaction.addToBackStack(null);
 
         // Commit the transaction
@@ -102,10 +104,20 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
 
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack if needed
-        transaction.replace(R.id.fragment, newFragment);
+        transaction.replace(R.id.fragment, newFragment, TAG_ALBUM_FRAGMENT);
         transaction.addToBackStack(null);
 
         // Commit the transaction
         transaction.commit();
+    }
+
+    @Override
+    public void onArtistListUpdated() {
+        MainActivityFragment mainActivityFragment = (MainActivityFragment)
+                getSupportFragmentManager().findFragmentByTag(TAG_MAIN_FRAGMENT);
+
+        if (mainActivityFragment != null) {
+            mainActivityFragment.updateSlidingTabs();
+        }
     }
 }

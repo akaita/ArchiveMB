@@ -45,7 +45,7 @@ import android.widget.TextView;
  * alternative is via the {@link TabColorizer} interface which provides you complete control over
  * which color is used for any individual position.
  * <p>
- * The views used as tabs can be customized by calling {@link #setCustomTabView(int, int)},
+ * The views used as mTabs can be customized by calling {@link #setCustomTabView(int, int)},
  * providing the layout ID of your custom layout.
  */
 public class SlidingTabLayout extends HorizontalScrollView {
@@ -117,7 +117,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
     /**
      * Sets the colors to be used for indicating the selected tab. These colors are treated as a
-     * circular array. Providing one color will mean that all tabs are indicated with the same color.
+     * circular array. Providing one color will mean that all mTabs are indicated with the same color.
      */
     public void setSelectedIndicatorColors(int... colors) {
         mTabStrip.setSelectedIndicatorColors(colors);
@@ -146,8 +146,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
     }
 
     /**
-     * Sets the associated view pager. Note that the assumption here is that the pager content
-     * (number of tabs and tab titles) does not change after this call has been made.
+     * Sets the associated view mPager. Note that the assumption here is that the mPager content
+     * (number of mTabs and tab titles) does not change after this call has been made.
      */
     public void setViewPager(ViewPager viewPager) {
         mTabStrip.removeAllViews();
@@ -160,7 +160,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
     }
 
     /**
-     * Create a default view to be used for tabs. This is called if a custom tab view is not set via
+     * Create a default view to be used for mTabs. This is called if a custom tab view is not set via
      * {@link #setCustomTabView(int, int)}.
      */
     protected TextView createDefaultTabView(Context context) {

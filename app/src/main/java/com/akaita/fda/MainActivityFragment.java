@@ -17,9 +17,9 @@ import java.util.List;
 public class MainActivityFragment extends Fragment {
     private View mView;
 
-    ViewPager pager;
-    ViewPagerAdapter adapter;
-    SlidingTabLayout tabs;
+    ViewPager mPager;
+    ViewPagerAdapter mAdapter;
+    SlidingTabLayout mTabs;
 
     public MainActivityFragment() {
     }
@@ -34,11 +34,24 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         this.mView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        String[] tabList = new String[]{"All"};
+        setSlidingTabs();
+
+        return this.mView;
+    }
+
+    private void setSlidingTabs() {
+        String[] tabList = getTabList();
+        this.mAdapter = createTabAdapter(tabList);
+        this.mPager = setTabPager(this.mAdapter, this.mView);
+        configureTabs(this.mView, this.mPager);
+    }
+
+    private String[] getTabList() {
+        String[] tabList = new String[]{getResources().getString(R.string.genre_all)};
         try {
             List<Genre> genreList = DaoFactory.getInstance().getGenreDao().queryForAll();
             tabList = new String[genreList.size()+1];
-            tabList[0] = "All";
+            tabList[0] = getResources().getString(R.string.genre_all);
             for (int i=0 ; i<genreList.size() ; i++){
                 tabList[i+1] = genreList.get(i).getName();
             }
@@ -46,19 +59,26 @@ public class MainActivityFragment extends Fragment {
             e.printStackTrace();
         }
 
-        // Creating The ViewPagerAdapter and Passing Fragment Manager, mNames fot the Tabs and Number Of Tabs.
-        adapter =  new ViewPagerAdapter(getChildFragmentManager(),tabList);
+        return tabList;
+    }
 
-        // Assigning ViewPager View and setting the adapter
-        pager = (ViewPager) this.mView.findViewById(R.id.pager);
+    private ViewPagerAdapter createTabAdapter(String[] tabList) {
+        return new ViewPagerAdapter(getChildFragmentManager(),tabList);
+    }
+
+    private ViewPager setTabPager(ViewPagerAdapter adapter, View view) {
+        ViewPager pager = (ViewPager) view.findViewById(R.id.pager);
         pager.setAdapter(adapter);
+        return pager;
+    }
 
+    private void configureTabs(View view, ViewPager pager) {
         // Assiging the Sliding Tab Layout View
-        tabs = (SlidingTabLayout) this.mView.findViewById(R.id.tabs);
-        tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+        mTabs = (SlidingTabLayout) view.findViewById(R.id.tabs);
+        mTabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the mTabs Space Evenly in Available width
 
         // Setting Custom Color for the Scroll bar indicator of the Tab View
-        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+        mTabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
                 return getResources().getColor(R.color.tabsScrollColor);
@@ -66,8 +86,10 @@ public class MainActivityFragment extends Fragment {
         });
 
         // Setting the ViewPager For the SlidingTabsLayout
-        tabs.setViewPager(pager);
+        mTabs.setViewPager(pager);
+    }
 
-        return this.mView;
+    public void updateSlidingTabs(){
+        setSlidingTabs();
     }
 }
