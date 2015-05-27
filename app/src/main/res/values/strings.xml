@@ -9,4 +9,5 @@
     <string name="update_instructions">Swipe down to update</string>
     <string name="network_access_error">No Internet access found</string>
     <string name="cant_update_nor_download_images">Won\'t download updates nor images</string>
+    <string name="no_new_version">Already in the last version</string>
 </resources>

@@ -9,4 +9,5 @@
     <string name="update_instructions">Arrastre abajo para actualizar</string>
     <string name="network_access_error">No se encontró conexión a Internet</string>
     <string name="cant_update_nor_download_images">No se descagarán actualizaciones ni imágenes</string>
+    <string name="no_new_version">Ya tiene la última versión</string>
 </resources>

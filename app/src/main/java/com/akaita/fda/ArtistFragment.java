@@ -178,6 +178,8 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
         finishRefreshUI();
         if (newData){
             this.mOnArtistListUpdatedListener.onArtistListUpdated();
+        } else {
+            Toast.makeText(getActivity(), R.string.no_new_version, Toast.LENGTH_SHORT).show();
         }
     }
 
