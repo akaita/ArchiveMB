@@ -16,7 +16,7 @@ import java.util.List;
 @DatabaseTable(tableName = "genre")
 public class Genre {
     // we use this field-name so we can query for posts with a certain id
-    public final static String ID_FIELD_NAME = "name";
+    public static final String ID_FIELD_NAME = "name";
 
     @DatabaseField(id = true, columnName = ID_FIELD_NAME)
     public String name;

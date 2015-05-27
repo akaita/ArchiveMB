@@ -15,7 +15,7 @@ import java.net.URL;
 
 
 public class MainActivity extends AppCompatActivity implements UpdateDatabaseTask.UpdateDatabaseResponse, ArtistFragment.OnArtistSelectedListener {
-    private final static String URL_1 = "http://i.img.co/data/data.json";
+    public static final String URL_1 = "http://i.img.co/data/data.json";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -10,7 +10,7 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 @DatabaseTable(tableName = "property")
 public class Property {
-    public final static String ID_FIELD_NAME = "id";
+    public static final String ID_FIELD_NAME = "id";
 
     @DatabaseField(id = true, columnName = ID_FIELD_NAME)
     public String name;

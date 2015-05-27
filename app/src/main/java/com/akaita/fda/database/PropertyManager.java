@@ -12,7 +12,7 @@ import java.util.List;
  * Created by mikel on 20/05/2015.
  */
 public class PropertyManager {
-    private final static String LAST_MODIFIED_DATE = "lastModified";
+    public static final String LAST_MODIFIED_DATE = "lastModified";
 
     public static long getLastModifiedDate(){
         final int NO_VALUE = -1;

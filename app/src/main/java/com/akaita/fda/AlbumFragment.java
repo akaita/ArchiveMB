@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class AlbumFragment extends Fragment {
     public static final String EXTRA_ARTIST_ID = "artistId";
-    private final static String SEPARATOR = " ";
+    public static final String SEPARATOR = " ";
 
     private Artist artist;
     private View mView;

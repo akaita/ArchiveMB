@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
-    private final static String SEPARATOR = " ";
+    public static final String SEPARATOR = " ";
     OnArtistItemSelectedListener mCallback;
 
     private List<Artist> artistList;
