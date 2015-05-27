@@ -22,8 +22,6 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TempTest.testStoredData();
-
         try {
             URL url1 = new URL(URL_1);
             showProgressBar(true);
