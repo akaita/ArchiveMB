@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.akaita.fda.async.SetImage;
+import com.akaita.fda.imagedownload.SetImage;
 import com.akaita.fda.database.objects.Album;
 import com.akaita.fda.database.objects.Artist;
 import com.akaita.fda.database.DaoFactory;
