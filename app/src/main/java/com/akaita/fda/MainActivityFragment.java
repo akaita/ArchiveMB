@@ -44,7 +44,7 @@ public class MainActivityFragment extends Fragment {
             tabList = new String[genreList.size()+1];
             tabList[0] = "All";
             for (int i=0 ; i<genreList.size() ; i++){
-                tabList[i+1] = genreList.get(i).name;
+                tabList[i+1] = genreList.get(i).getName();
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -1,8 +1,6 @@
 package com.akaita.fda.database;
 
-import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 /**
@@ -13,13 +11,21 @@ public class Property {
     public static final String ID_FIELD_NAME = "id";
 
     @DatabaseField(id = true, columnName = ID_FIELD_NAME)
-    public String name;
+    private String name;
 
     @DatabaseField
-    public String value;
+    private String value;
 
     Property(){
         // for ormlite
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getValue() {
+        return value;
     }
 
     public Property (String name, String value) {

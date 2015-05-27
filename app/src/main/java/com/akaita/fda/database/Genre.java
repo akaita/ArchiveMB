@@ -15,11 +15,10 @@ import java.util.List;
  */
 @DatabaseTable(tableName = "genre")
 public class Genre {
-    // we use this field-name so we can query for posts with a certain id
     public static final String ID_FIELD_NAME = "name";
 
     @DatabaseField(id = true, columnName = ID_FIELD_NAME)
-    public String name;
+    private String name;
 
     Genre() {
         // for ormlite
@@ -29,9 +28,14 @@ public class Genre {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     /*
-     * custom queries
+     * many-to-many queries
      */
+
     private static PreparedQuery<Artist> artistPreparedQuery = null;
 
     public List<Artist> artists() throws SQLException {
@@ -45,18 +49,13 @@ public class Genre {
 
     private PreparedQuery<Artist> createArtistPreparedQuery() throws SQLException {
         Dao<ArtistGenre, Integer> artistGenreDao = DaoFactory.getInstance().getArtistGenreDao();
-        // build our inner query for UserPost objects
         QueryBuilder<ArtistGenre, Integer> artistGenreQb = artistGenreDao.queryBuilder();
-        // just select the post-id field
         artistGenreQb.selectColumns(ArtistGenre.ARTIST_ID_FIELD_NAME);
         SelectArg genreSelectArg = new SelectArg();
-        // you could also just pass in user1 here
         artistGenreQb.where().eq(ArtistGenre.GENRE_ID_FIELD_NAME, genreSelectArg);
 
         Dao<Artist, Long> artistDao = DaoFactory.getInstance().getArtistDao();
-        // build our outer query for Post objects
         QueryBuilder<Artist, Long> artistQb = artistDao.queryBuilder();
-        // where the id matches in the post-id from the inner query
         artistQb.where().in(Artist.ID_FIELD_NAME, artistGenreQb);
         return artistQb.prepare();
     }

@@ -48,7 +48,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        holder.nameView.setText(artistList.get(position).name);
+        holder.nameView.setText(artistList.get(position).getName());
         if (mCallback != null) {
             holder.rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -58,7 +58,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
             });
         }
 
-        SetImage.setImage(mContext, holder.picture, artistList.get(position).pictureUrl);
+        SetImage.setImage(mContext, holder.picture, artistList.get(position).getPictureUrl());
     }
 
     @Override
@@ -81,7 +81,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
     public static String concatenate(List<Genre> list, String separator) {
         StringBuffer result = new StringBuffer();
         for (Genre genre : list) {
-            result.append( genre.name );
+            result.append( genre.getName() );
             result.append( separator );
         }
         return result.delete(result.length()-separator.length(), result.length()).toString();

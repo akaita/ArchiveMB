@@ -17,7 +17,7 @@ public class PropertyManager {
     public static long getLastModifiedDate(){
         final int NO_VALUE = -1;
         try {
-            return getProperty(LAST_MODIFIED_DATE)==null?NO_VALUE:Long.parseLong(getProperty(LAST_MODIFIED_DATE).value);
+            return getProperty(LAST_MODIFIED_DATE)==null?NO_VALUE:Long.parseLong(getProperty(LAST_MODIFIED_DATE).getValue());
         } catch (SQLException e) {
             e.printStackTrace();
             return NO_VALUE;
@@ -43,11 +43,8 @@ public class PropertyManager {
 
     private static PreparedQuery<Property> createPropertyPreparedQuery() throws SQLException {
         Dao<Property, String> propertyDao = DaoFactory.getInstance().getPropertyDao();
-        // build our inner query for UserPost objects
         QueryBuilder<Property, String> propertyQb = propertyDao.queryBuilder();
-        // just select the post-id field
         SelectArg propertySelectArg = new SelectArg();
-        // you could also just pass in user1 here
         propertyQb.where().eq(Property.ID_FIELD_NAME, propertySelectArg);
         return propertyQb.prepare();
     }

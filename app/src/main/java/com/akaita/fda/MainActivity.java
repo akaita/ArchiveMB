@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle bundl = new Bundle();
-        bundl.putLong(AlbumFragment.EXTRA_ARTIST_ID, artist.id);
+        bundl.putLong(AlbumFragment.EXTRA_ARTIST_ID, artist.getId());
 
         // Create new fragment and transaction
         AlbumFragment newFragment = new AlbumFragment();

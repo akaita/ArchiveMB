@@ -65,8 +65,8 @@ public class AlbumFragment extends Fragment {
 
     private void addHeader() {
         View header = getActivity().getLayoutInflater().inflate(R.layout.artist_details, this.mLinearLayout, false);
-        SetImage.setImage(getActivity(), (ImageView) header.findViewById(R.id.artistImage), this.artist.pictureUrl);
-        ((TextView)header.findViewById(R.id.artistName)).setText(artist.name);
+        SetImage.setImage(getActivity(), (ImageView) header.findViewById(R.id.artistImage), this.artist.getPictureUrl());
+        ((TextView)header.findViewById(R.id.artistName)).setText(artist.getName());
         try {
             List<Genre> genreList = this.artist.genres();
             ((TextView) header.findViewById(R.id.artistGenres)).setText(concatenate(genreList, SEPARATOR));
@@ -81,7 +81,7 @@ public class AlbumFragment extends Fragment {
         addtitle(getResources().getString(R.string.artist_details_descrition));
 
         View text = getActivity().getLayoutInflater().inflate(R.layout.list_text, this.mLinearLayout, false);
-        ((TextView)text.findViewById(R.id.textText)).setText(Html.fromHtml(this.artist.description));
+        ((TextView)text.findViewById(R.id.textText)).setText(Html.fromHtml(this.artist.getDescription()));
         this.mLinearLayout.addView(text);
     }
 
@@ -101,8 +101,8 @@ public class AlbumFragment extends Fragment {
 
     private void addAlbum(Album album) {
         View albumView = getActivity().getLayoutInflater().inflate(R.layout.album_thumb_card, this.mLinearLayout, false);
-        SetImage.setImage(getActivity(), (ImageView) albumView.findViewById(R.id.albumImage), album.pictureUrl);
-        ((TextView)albumView.findViewById(R.id.albumName)).setText(album.title);
+        SetImage.setImage(getActivity(), (ImageView) albumView.findViewById(R.id.albumImage), album.getPictureUrl());
+        ((TextView)albumView.findViewById(R.id.albumName)).setText(album.getTitle());
         this.mLinearLayout.addView(albumView);
     }
 
@@ -115,7 +115,7 @@ public class AlbumFragment extends Fragment {
     public static String concatenate(List<Genre> list, String separator) {
         StringBuffer result = new StringBuffer();
         for (Genre genre : list) {
-            result.append( genre.name );
+            result.append( genre.getName() );
             result.append( separator );
         }
         return result.delete(result.length()-separator.length(), result.length()).toString();

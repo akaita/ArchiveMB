@@ -11,10 +11,10 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "type")
 public class Type {
     @DatabaseField(id = true)
-    public String name;
+    private String name;
 
     @ForeignCollectionField
-    public ForeignCollection<Album> albums;
+    private ForeignCollection<Album> albums;
 
     Type() {
         // for ormlite
@@ -22,5 +22,9 @@ public class Type {
 
     public Type(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }
