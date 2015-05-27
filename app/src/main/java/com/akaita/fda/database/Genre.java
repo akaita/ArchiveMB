@@ -1,9 +1,7 @@
 package com.akaita.fda.database;
 
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.SelectArg;
@@ -41,12 +39,12 @@ public class Genre {
             artistPreparedQuery = createArtistPreparedQuery();
         }
         artistPreparedQuery.setArgumentHolderValue(0, this);
-        Dao<Artist, Long> artistDao = DaoFactory.getInstance().getArtists();
+        Dao<Artist, Long> artistDao = DaoFactory.getInstance().getArtistDao();
         return artistDao.query(artistPreparedQuery);
     }
 
     private PreparedQuery<Artist> createArtistPreparedQuery() throws SQLException {
-        Dao<ArtistGenre, Integer> artistGenreDao = DaoFactory.getInstance().getArtistGenre();
+        Dao<ArtistGenre, Integer> artistGenreDao = DaoFactory.getInstance().getArtistGenreDao();
         // build our inner query for UserPost objects
         QueryBuilder<ArtistGenre, Integer> artistGenreQb = artistGenreDao.queryBuilder();
         // just select the post-id field
@@ -55,7 +53,7 @@ public class Genre {
         // you could also just pass in user1 here
         artistGenreQb.where().eq(ArtistGenre.GENRE_ID_FIELD_NAME, genreSelectArg);
 
-        Dao<Artist, Long> artistDao = DaoFactory.getInstance().getArtists();
+        Dao<Artist, Long> artistDao = DaoFactory.getInstance().getArtistDao();
         // build our outer query for Post objects
         QueryBuilder<Artist, Long> artistQb = artistDao.queryBuilder();
         // where the id matches in the post-id from the inner query

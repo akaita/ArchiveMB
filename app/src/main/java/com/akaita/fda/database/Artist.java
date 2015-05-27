@@ -57,7 +57,7 @@ public class Artist {
             albumPreparedQuery = createAlbumPreparedQuery();
         }
         albumPreparedQuery.setArgumentHolderValue(0, this);
-        Dao<Album, Long> albumDao = DaoFactory.getInstance().getAlbums();
+        Dao<Album, Long> albumDao = DaoFactory.getInstance().getAlbumDao();
         return albumDao.query(albumPreparedQuery);
     }
 
@@ -66,12 +66,12 @@ public class Artist {
             genrePreparedQuery = createGenrePreparedQuery();
         }
         genrePreparedQuery.setArgumentHolderValue(0, this);
-        Dao<Genre, String> genreDao = DaoFactory.getInstance().getGenres();
+        Dao<Genre, String> genreDao = DaoFactory.getInstance().getGenreDao();
         return genreDao.query(genrePreparedQuery);
     }
 
     private PreparedQuery<Album> createAlbumPreparedQuery() throws SQLException {
-        Dao<ArtistAlbum, Integer> artistAlbumDao = DaoFactory.getInstance().getArtistAlbum();
+        Dao<ArtistAlbum, Integer> artistAlbumDao = DaoFactory.getInstance().getArtistAlbumDao();
         // build our inner query for UserPost objects
         QueryBuilder<ArtistAlbum, Integer> artistAlbumQb = artistAlbumDao.queryBuilder();
         // just select the post-id field
@@ -80,7 +80,7 @@ public class Artist {
         // you could also just pass in user1 here
         artistAlbumQb.where().eq(ArtistAlbum.ARTIST_ID_FIELD_NAME, artistSelectArg);
 
-        Dao<Album, Long> albumDao = DaoFactory.getInstance().getAlbums();
+        Dao<Album, Long> albumDao = DaoFactory.getInstance().getAlbumDao();
         // build our outer query for Post objects
         QueryBuilder<Album, Long> albumQb = albumDao.queryBuilder();
         // where the id matches in the post-id from the inner query
@@ -89,7 +89,7 @@ public class Artist {
     }
 
     private PreparedQuery<Genre> createGenrePreparedQuery() throws SQLException {
-        Dao<ArtistGenre, Integer> artistGenreDao = DaoFactory.getInstance().getArtistGenre();
+        Dao<ArtistGenre, Integer> artistGenreDao = DaoFactory.getInstance().getArtistGenreDao();
         // build our inner query for UserPost objects
         QueryBuilder<ArtistGenre, Integer> artistGenreQb = artistGenreDao.queryBuilder();
         // just select the post-id field
@@ -98,7 +98,7 @@ public class Artist {
         // you could also just pass in user1 here
         artistGenreQb.where().eq(ArtistGenre.ARTIST_ID_FIELD_NAME, artistSelectArg);
 
-        Dao<Genre, String> genreDao = DaoFactory.getInstance().getGenres();
+        Dao<Genre, String> genreDao = DaoFactory.getInstance().getGenreDao();
         // build our outer query for Post objects
         QueryBuilder<Genre, String> genreQb = genreDao.queryBuilder();
         // where the id matches in the post-id from the inner query

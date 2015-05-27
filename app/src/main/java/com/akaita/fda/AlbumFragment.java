@@ -56,7 +56,7 @@ public class AlbumFragment extends Fragment {
         long artistId = bundle.getLong(EXTRA_ARTIST_ID);
         Artist artist = null;
         try {
-            artist = DaoFactory.getInstance().getArtists().queryForId(artistId);
+            artist = DaoFactory.getInstance().getArtistDao().queryForId(artistId);
         } catch (SQLException e) {
             e.printStackTrace();
         }

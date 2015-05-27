@@ -6,7 +6,6 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.SelectArg;
 
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,7 +26,7 @@ public class PropertyManager {
 
     public static void setLastModifiedDate(long date) throws SQLException {
         Property property = new Property(LAST_MODIFIED_DATE, String.valueOf(date));
-        Dao<Property, String> propertyDao = DaoFactory.getInstance().getProperties();
+        Dao<Property, String> propertyDao = DaoFactory.getInstance().getPropertyDao();
         propertyDao.createIfNotExists(property);
     }
 
@@ -37,13 +36,13 @@ public class PropertyManager {
             propertyPreparedQuery = createPropertyPreparedQuery();
         }
         propertyPreparedQuery.setArgumentHolderValue(0, propertyName);
-        Dao<Property, String> propertyDao = DaoFactory.getInstance().getProperties();
+        Dao<Property, String> propertyDao = DaoFactory.getInstance().getPropertyDao();
         List<Property> propertyList = propertyDao.query(propertyPreparedQuery);
         return propertyList.isEmpty()?null:propertyList.get(0);
     }
 
     private static PreparedQuery<Property> createPropertyPreparedQuery() throws SQLException {
-        Dao<Property, String> propertyDao = DaoFactory.getInstance().getProperties();
+        Dao<Property, String> propertyDao = DaoFactory.getInstance().getPropertyDao();
         // build our inner query for UserPost objects
         QueryBuilder<Property, String> propertyQb = propertyDao.queryBuilder();
         // just select the post-id field

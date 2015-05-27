@@ -4,20 +4,14 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.akaita.fda.database.Artist;
 import com.akaita.fda.database.DaoFactory;
 import com.akaita.fda.database.Genre;
-import com.akaita.fda.database.RangedQuery;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -46,7 +40,7 @@ public class MainActivityFragment extends Fragment {
 
         String[] tabList = new String[]{"All"};
         try {
-            List<Genre> genreList = DaoFactory.getInstance().getGenres().queryForAll();
+            List<Genre> genreList = DaoFactory.getInstance().getGenreDao().queryForAll();
             tabList = new String[genreList.size()+1];
             tabList[0] = "All";
             for (int i=0 ; i<genreList.size() ; i++){

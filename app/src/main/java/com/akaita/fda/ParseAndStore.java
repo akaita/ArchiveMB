@@ -16,7 +16,6 @@ import com.j256.ormlite.support.DatabaseConnection;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
-import java.util.List;
 
 /**
  * Created by mikel on 19/05/2015.
@@ -198,12 +197,12 @@ public class ParseAndStore {
     }
 
     private void prepareDbBatch() throws SQLException {
-        this.albumDao = DaoFactory.getInstance().getAlbums();
-        this.artistDao = DaoFactory.getInstance().getArtists();
-        this.artistAlbumDao = DaoFactory.getInstance().getArtistAlbum();
-        this.artistGenreDao = DaoFactory.getInstance().getArtistGenre();
-        this.genreDao = DaoFactory.getInstance().getGenres();
-        this.typeDao = DaoFactory.getInstance().getTypes();
+        this.albumDao = DaoFactory.getInstance().getAlbumDao();
+        this.artistDao = DaoFactory.getInstance().getArtistDao();
+        this.artistAlbumDao = DaoFactory.getInstance().getArtistAlbumDao();
+        this.artistGenreDao = DaoFactory.getInstance().getArtistGenreDao();
+        this.genreDao = DaoFactory.getInstance().getGenreDao();
+        this.typeDao = DaoFactory.getInstance().getTypeDao();
 
         this.dbConn = artistDao.startThreadConnection();
         this.artistDao.setAutoCommit(dbConn, false);

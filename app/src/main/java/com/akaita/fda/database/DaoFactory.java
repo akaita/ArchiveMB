@@ -34,49 +34,49 @@ public class DaoFactory extends Application {
         return instance;
     }
 
-    public Dao<Artist, Long> getArtists() throws SQLException {
+    public Dao<Artist, Long> getArtistDao() throws SQLException {
         if (artists == null) {
             artists = databaseHelper.getDao(Artist.class);
         }
         return artists;
     }
 
-    public Dao<ArtistAlbum, Integer> getArtistAlbum() throws SQLException {
+    public Dao<ArtistAlbum, Integer> getArtistAlbumDao() throws SQLException {
         if (artistAlbum == null) {
             artistAlbum = databaseHelper.getDao(ArtistAlbum.class);
         }
         return artistAlbum;
     }
 
-    public Dao<ArtistGenre, Integer> getArtistGenre() throws SQLException {
+    public Dao<ArtistGenre, Integer> getArtistGenreDao() throws SQLException {
         if (artistGenre == null) {
             artistGenre = databaseHelper.getDao(ArtistGenre.class);
         }
         return artistGenre;
     }
 
-    public Dao<Genre, String> getGenres() throws SQLException {
+    public Dao<Genre, String> getGenreDao() throws SQLException {
         if (genres == null) {
             genres = databaseHelper.getDao(Genre.class);
         }
         return genres;
     }
 
-    public Dao<Album, Long> getAlbums() throws SQLException {
+    public Dao<Album, Long> getAlbumDao() throws SQLException {
         if (albums == null) {
             albums = databaseHelper.getDao(Album.class);
         }
         return albums;
     }
 
-    public Dao<Type, String> getTypes() throws SQLException {
+    public Dao<Type, String> getTypeDao() throws SQLException {
         if (types == null) {
             types = databaseHelper.getDao(Type.class);
         }
         return types;
     }
 
-    public Dao<Property, String> getProperties() throws SQLException {
+    public Dao<Property, String> getPropertyDao() throws SQLException {
         if (properties == null) {
             properties = databaseHelper.getDao(Property.class);
         }

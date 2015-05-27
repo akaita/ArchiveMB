@@ -17,20 +17,20 @@ public class RangedQuery {
             return getArtistRange(offset, range);
         }
         PreparedQuery<Artist> artistRangePreparedQuery = createArtistRangeByGenrePreparedQuery(offset, range, genreFilter);
-        Dao<Artist, Long> artistDao = DaoFactory.getInstance().getArtists();
-        Genre genre = DaoFactory.getInstance().getGenres().queryForId(genreFilter);
+        Dao<Artist, Long> artistDao = DaoFactory.getInstance().getArtistDao();
+        Genre genre = DaoFactory.getInstance().getGenreDao().queryForId(genreFilter);
         artistRangePreparedQuery.setArgumentHolderValue(0, genre);
         return artistDao.query(artistRangePreparedQuery);
     }
 
     public static List<Artist> getArtistRange(long offset, long range) throws SQLException {
         PreparedQuery<Artist> artistRangePreparedQuery = createArtistRangePreparedQuery(offset, range);
-        Dao<Artist, Long> artistDao = DaoFactory.getInstance().getArtists();
+        Dao<Artist, Long> artistDao = DaoFactory.getInstance().getArtistDao();
         return artistDao.query(artistRangePreparedQuery);
     }
 
     private static PreparedQuery<Artist> createArtistRangeByGenrePreparedQuery(long offset, long range, String genreFilter) throws SQLException {
-        Dao<ArtistGenre, Integer> artistGenreDao = DaoFactory.getInstance().getArtistGenre();
+        Dao<ArtistGenre, Integer> artistGenreDao = DaoFactory.getInstance().getArtistGenreDao();
         // build our inner query for UserPost objects
         QueryBuilder<ArtistGenre, Integer> artistGenreQb = artistGenreDao.queryBuilder();
         // just select the post-id field
@@ -39,7 +39,7 @@ public class RangedQuery {
         // you could also just pass in user1 here
         artistGenreQb.where().eq(ArtistGenre.GENRE_ID_FIELD_NAME, genreSelectArg);
 
-        Dao<Artist, Long> artistDao = DaoFactory.getInstance().getArtists();
+        Dao<Artist, Long> artistDao = DaoFactory.getInstance().getArtistDao();
         // build our outer query for Post objects
         QueryBuilder<Artist, Long> artistQb = artistDao.queryBuilder();
         // where the id matches in the post-id from the inner query
@@ -50,7 +50,7 @@ public class RangedQuery {
     }
 
     private static PreparedQuery<Artist> createArtistRangePreparedQuery(long offset, long range) throws SQLException {
-        Dao<Artist, Long> artistDao = DaoFactory.getInstance().getArtists();
+        Dao<Artist, Long> artistDao = DaoFactory.getInstance().getArtistDao();
         QueryBuilder<Artist, Long> artistQb = artistDao.queryBuilder();
         artistQb.offset(offset);
         artistQb.limit(range);

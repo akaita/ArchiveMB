@@ -19,8 +19,8 @@ import java.util.List;
 public class TempTest {
     public static void testStoredData(){
         try {
-            List<Album> albumList = DaoFactory.getInstance().getAlbums().queryForAll();
-            List<Artist> artistList = DaoFactory.getInstance().getArtists().queryForAll();
+            List<Album> albumList = DaoFactory.getInstance().getAlbumDao().queryForAll();
+            List<Artist> artistList = DaoFactory.getInstance().getArtistDao().queryForAll();
             for (int i=0; i<2 && i<artistList.size() ; i++){
                 Artist artist = artistList.get(i);
                 List<Album> albums = artist.albums();
@@ -34,9 +34,9 @@ public class TempTest {
 
     private static void testDatabase() throws SQLException {
         DaoFactory factory = DaoFactory.getInstance();
-        Dao<Artist, Long> artist = factory.getArtists();
-        Dao<Album, Long> album = factory.getAlbums();
-        Dao<ArtistAlbum, Integer> artistAlbum = factory.getArtistAlbum();
+        Dao<Artist, Long> artist = factory.getArtistDao();
+        Dao<Album, Long> album = factory.getAlbumDao();
+        Dao<ArtistAlbum, Integer> artistAlbum = factory.getArtistAlbumDao();
 
         Type type1 = new Type("type1");
         Type type2 = new Type("type2");
