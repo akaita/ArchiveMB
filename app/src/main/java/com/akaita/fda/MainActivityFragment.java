@@ -3,6 +3,7 @@ package com.akaita.fda;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -11,44 +12,31 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.akaita.fda.database.Artist;
+import com.akaita.fda.database.DaoFactory;
+import com.akaita.fda.database.Genre;
 import com.akaita.fda.database.RangedQuery;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements ArtistAdapter.OnArtistItemSelectedListener{
-
-    final static float COLUMN_SIZE_INCHES = 1;
-    final static int PAGE_SIZE = 10;
-
-    OnArtistSelectedListener mCallback;
-
+public class MainActivityFragment extends Fragment {
     private View mView;
-    private ArtistAdapter artistAdapter;
+
+    ViewPager pager;
+    ViewPagerAdapter adapter;
+    SlidingTabLayout tabs;
 
     public MainActivityFragment() {
-    }
-
-    public interface OnArtistSelectedListener {
-        public void onArtistSelected(Artist artist);
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
-        try {
-            mCallback = (OnArtistSelectedListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnArtistSelectedListener");
-        }
     }
 
     @Override
@@ -56,62 +44,42 @@ public class MainActivityFragment extends Fragment implements ArtistAdapter.OnAr
                              Bundle savedInstanceState) {
         this.mView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        this.artistAdapter = new ArtistAdapter(getActivity());
-        this.artistAdapter.setOnArtistItemSelectedListener(this);
-
-        prepareGridRecyclerView();
-        loadFirstItemBatch();
-        return this.mView;
-    }
-
-    private void prepareGridRecyclerView(){
-        RecyclerView recyclerView = (RecyclerView) mView.findViewById(R.id.recyclerView);
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerVie
-        recyclerView.setHasFixedSize(true);
-
-        // recyclerView.addItemDecoration(new MarginDecoration(this));
-
-        int columns = JavaUtils.getColumns(getActivity(), 1);
-
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(columns, StaggeredGridLayoutManager.VERTICAL));
-        recyclerView.setAdapter(this.artistAdapter);
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
-                int totalItemCount = recyclerView.getLayoutManager().getItemCount();
-                int[] lastVisiblesItems = ((StaggeredGridLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPositions(null);
-
-                if ((JavaUtils.findMax(lastVisiblesItems) + 1) == totalItemCount) {
-                    loadMoreItems();
-                    Log.e("temp", "last element");
-                }
-            }
-        });
-    }
-
-    private void loadFirstItemBatch() {
-        loadMoreItems();
-    }
-
-    private void loadMoreItems() {
-        List<Artist> newArtistList = null;
+        String[] tabList = new String[]{"All"};
         try {
-            newArtistList = RangedQuery.getArtistRange(artistAdapter.getItemCount(), PAGE_SIZE);
+            List<Genre> genreList = DaoFactory.getInstance().getGenres().queryForAll();
+            tabList = new String[genreList.size()+1];
+            tabList[0] = "All";
+            for (int i=0 ; i<genreList.size() ; i++){
+                tabList[i+1] = genreList.get(i).name;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        for (Artist artist : newArtistList){
-            artistAdapter.add(artist, artistAdapter.getItemCount());
-        }
-    }
 
-    @Override
-    public void onArtistItemSelected(Artist artist) {
-        mCallback.onArtistSelected(artist);
-    }
+        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
+        adapter =  new ViewPagerAdapter(getChildFragmentManager(),tabList);
 
+        // Assigning ViewPager View and setting the adapter
+        pager = (ViewPager) this.mView.findViewById(R.id.pager);
+        pager.setAdapter(adapter);
+
+        // Assiging the Sliding Tab Layout View
+        tabs = (SlidingTabLayout) this.mView.findViewById(R.id.tabs);
+        tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+
+        // Setting Custom Color for the Scroll bar indicator of the Tab View
+        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                return getResources().getColor(R.color.tabsScrollColor);
+            }
+        });
+
+        // Setting the ViewPager For the SlidingTabsLayout
+        tabs.setViewPager(pager);
+
+
+
+        return this.mView;
+    }
 }

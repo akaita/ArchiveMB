@@ -23,7 +23,7 @@ import java.util.List;
  * Created by mikel on 25/05/2015.
  */
 public class AlbumFragment extends Fragment {
-    public static final String ARTIST_ID = "artistId";
+    public static final String EXTRA_ARTIST_ID = "artistId";
     private final static String SEPARATOR = " ";
 
     private Artist artist;
@@ -53,7 +53,7 @@ public class AlbumFragment extends Fragment {
 
     private Artist getChosenArtist() {
         Bundle bundle = getArguments();
-        long artistId = bundle.getLong(ARTIST_ID);
+        long artistId = bundle.getLong(EXTRA_ARTIST_ID);
         Artist artist = null;
         try {
             artist = DaoFactory.getInstance().getArtists().queryForId(artistId);

@@ -2,17 +2,11 @@ package com.akaita.fda;
 
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.akaita.fda.database.Artist;
 
@@ -20,7 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 
-public class MainActivity extends AppCompatActivity implements UpdateDatabaseTask.UpdateDatabaseResponse, MainActivityFragment.OnArtistSelectedListener {
+public class MainActivity extends AppCompatActivity implements UpdateDatabaseTask.UpdateDatabaseResponse, ArtistFragment.OnArtistSelectedListener {
     private final static String URL_1 = "http://i.img.co/data/data.json";
 
     @Override
@@ -103,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle bundl = new Bundle();
-        bundl.putLong(AlbumFragment.ARTIST_ID, artist.id);
+        bundl.putLong(AlbumFragment.EXTRA_ARTIST_ID, artist.id);
 
         // Create new fragment and transaction
         AlbumFragment newFragment = new AlbumFragment();
