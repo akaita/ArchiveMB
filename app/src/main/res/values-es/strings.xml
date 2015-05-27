@@ -4,4 +4,5 @@
     <string name="artist_details_descrition">Descripción</string>
     <string name="album_list_title">Discos</string>
     <string name="action_settings">Configuración</string>
+    <string name="genre_all">Todos</string>
 </resources>

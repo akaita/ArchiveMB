@@ -36,7 +36,7 @@ public class ParseAndStore {
     }
 
     public void artistAndAlbums() throws SQLException {
-        /* example origin
+        /* origin sample
         {
             "artists": [
             {

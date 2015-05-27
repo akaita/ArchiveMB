@@ -1,5 +1,8 @@
 package com.akaita.fda;
 
+/**
+ * Created by mikel on 20/05/2015.
+ */
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,10 +18,6 @@ import com.akaita.fda.database.RangedQuery;
 import java.sql.SQLException;
 import java.util.List;
 
-
-/**
- * A placeholder fragment containing a simple view.
- */
 public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistItemSelectedListener{
     public static final String EXTRA_GENRE_ID = "genre";
 
@@ -35,7 +34,7 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
     }
 
     public interface OnArtistSelectedListener {
-        public void onArtistSelected(Artist artist);
+        void onArtistSelected(Artist artist);
     }
 
     @Override

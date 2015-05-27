@@ -33,7 +33,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
         mCallback = listener;
     }
     public interface OnArtistItemSelectedListener {
-        public void onArtistItemSelected(Artist artist);
+        void onArtistItemSelected(Artist artist);
     }
 
     @Override
@@ -45,13 +45,13 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
     @Override
     public void onBindViewHolder(final ArtistThumbViewHolder holder, final int position) {
         try {
-            holder.genreView.setText(concatenate(artistList.get(position).genres(), SEPARATOR));
+            holder.getGenreView().setText(concatenate(artistList.get(position).genres(), SEPARATOR));
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        holder.nameView.setText(artistList.get(position).getName());
+        holder.getNameView().setText(artistList.get(position).getName());
         if (mCallback != null) {
-            holder.rootView.setOnClickListener(new View.OnClickListener() {
+            holder.getRootView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mCallback.onArtistItemSelected(artistList.get(position));
@@ -59,7 +59,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
             });
         }
 
-        SetImage.setImage(mContext, holder.picture, artistList.get(position).getPictureUrl());
+        SetImage.setImage(mContext, holder.getPictureView(), artistList.get(position).getPictureUrl());
     }
 
     @Override

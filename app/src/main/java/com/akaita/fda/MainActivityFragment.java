@@ -14,10 +14,6 @@ import com.akaita.fda.database.objects.Genre;
 import java.sql.SQLException;
 import java.util.List;
 
-
-/**
- * A placeholder fragment containing a simple view.
- */
 public class MainActivityFragment extends Fragment {
     private View mView;
 
@@ -50,7 +46,7 @@ public class MainActivityFragment extends Fragment {
             e.printStackTrace();
         }
 
-        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
+        // Creating The ViewPagerAdapter and Passing Fragment Manager, mNames fot the Tabs and Number Of Tabs.
         adapter =  new ViewPagerAdapter(getChildFragmentManager(),tabList);
 
         // Assigning ViewPager View and setting the adapter
@@ -71,8 +67,6 @@ public class MainActivityFragment extends Fragment {
 
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
-
-
 
         return this.mView;
     }
