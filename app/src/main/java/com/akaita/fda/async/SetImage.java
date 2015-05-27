@@ -29,16 +29,16 @@ public class SetImage {
         switch (method){
             case ASYNCTASK:
                 Uri imageUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
-                        context.getResources().getResourcePackageName(R.mipmap.ic_launcher) + '/' +
-                        context.getResources().getResourceTypeName(R.mipmap.ic_launcher) + '/' +
-                        context.getResources().getResourceEntryName(R.mipmap.ic_launcher) );
+                        context.getResources().getResourcePackageName(R.drawable.image_download_placeholder) + '/' +
+                        context.getResources().getResourceTypeName(R.drawable.image_download_placeholder) + '/' +
+                        context.getResources().getResourceEntryName(R.drawable.image_download_placeholder) );
                 imageView.setImageURI(imageUri);
                 new DownloadImageTask(imageView).execute(url);
                 break;
             case CACHE:
                 Picasso.with(context).load(url)
-                        .placeholder(R.mipmap.ic_launcher)
-                        .error(R.mipmap.ic_launcher)
+                        .placeholder(R.drawable.image_download_placeholder)
+                        .error(R.drawable.image_download_error)
                         .resize(context.getResources().getInteger(R.integer.caches_artist_thumb_big),
                                 0)
                         .into(imageView, new Callback() {
