@@ -6,16 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.akaita.fda.database.DaoFactory;
-import com.akaita.fda.database.PropertyManager;
 import com.akaita.fda.database.objects.Artist;
-import com.akaita.fda.update.UpdateDatabaseTask;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.SQLException;
 
 public class MainActivity extends AppCompatActivity implements ArtistFragment.OnArtistSelectedListener, ArtistFragment.OnArtistListUpdatedListener {
@@ -29,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements ArtistFragment.On
         setContentView(R.layout.activity_main);
 
         showUpdateInstructions(!isDataAvailable());
+        checkNetworkAccess();
 
         showFragmentArtists();
     }
@@ -130,6 +126,13 @@ public class MainActivity extends AppCompatActivity implements ArtistFragment.On
     }
 
     private void showUpdateFailed(boolean show) {
-        Toast.makeText(this, R.string.update_failed, Toast.LENGTH_LONG);
+        Toast.makeText(this, R.string.update_failed, Toast.LENGTH_SHORT).show();
+    }
+
+    private void checkNetworkAccess() {
+        if (!NetworkUtils.isNetworkAvailable(this)) {
+            Toast.makeText(this, R.string.network_access_error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.cant_update_nor_download_images, Toast.LENGTH_SHORT).show();
+        }
     }
 }

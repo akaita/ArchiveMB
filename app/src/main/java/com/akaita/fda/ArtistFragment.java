@@ -12,6 +12,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.akaita.fda.database.objects.Artist;
 import com.akaita.fda.database.RangedQuery;
@@ -153,21 +154,37 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
 
     @Override
     public void onRefresh() {
-        URL url1 = null;
-        try {
-            url1 = new URL(MainActivity.URL_1);
-            new UpdateDatabaseTask(this).execute(url1);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        if (!NetworkUtils.isNetworkAvailable(getActivity())) {
+            Toast.makeText(getActivity(), R.string.network_access_error, Toast.LENGTH_SHORT).show();
+            finishRefreshUI();
+            swipeLayout.setRefreshing(false);
+        } else {
+            URL url1 = null;
+            try {
+                url1 = new URL(MainActivity.URL_1);
+                new UpdateDatabaseTask(this).execute(url1);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
     @Override
     public void onUpdateDatabaseFinish(boolean newData) {
-        swipeLayout.setRefreshing(false);
+        finishRefreshUI();
         if (newData){
             mOnArtistListUpdatedListener.onArtistListUpdated();
         }
     }
+
+    private void checkNetworkAccess() {
+        if (!NetworkUtils.isNetworkAvailable(getActivity())) {
+            Toast.makeText(getActivity(), R.string.network_access_error, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void finishRefreshUI(){
+        swipeLayout.setRefreshing(false);
+    }
+
 }

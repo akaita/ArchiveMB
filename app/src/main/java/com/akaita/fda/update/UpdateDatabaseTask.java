@@ -50,7 +50,7 @@ public class UpdateDatabaseTask extends AsyncTask<URL, Integer, Boolean> {
 
     /**
      * Check provided URL and try to update the data stored in the database<br>
-     * Data won't be update if the content of the URL hasn't changed since the last update
+     * Data won't be updated if the content of the URL hasn't changed since the last update
      *
      * @param url
      * @return true when data updated, false when data not updated
