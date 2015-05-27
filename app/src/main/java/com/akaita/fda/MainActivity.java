@@ -14,7 +14,7 @@ import com.akaita.fda.update.UpdateDatabaseTask;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity implements UpdateDatabaseTask.OnUpdateDatabaseFinishListener, ArtistFragment.OnArtistSelectedListener, ArtistFragment.OnArtistListUpdatedListener {
+public class MainActivity extends AppCompatActivity implements ArtistFragment.OnArtistSelectedListener, ArtistFragment.OnArtistListUpdatedListener {
     public static final String URL_1 = "http://i.img.co/data/data.json";
     public static final String TAG_MAIN_FRAGMENT = "main_fragment";
     public static final String TAG_ALBUM_FRAGMENT = "album_fragment";
@@ -23,14 +23,6 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        try {
-            URL url1 = new URL(URL_1);
-            showProgressBar(true);
-           // new UpdateDatabaseTask(this).execute(url1);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
 
         showFragmentArtists();
     }
@@ -55,17 +47,6 @@ public class MainActivity extends AppCompatActivity implements UpdateDatabaseTas
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onUpdateDatabaseFinish(boolean newData) {
-        showProgressBar(false);
-        showFragmentArtists();
-    }
-
-    private void showProgressBar(boolean show) {
-        ProgressBar progressBar = ((ProgressBar) findViewById(R.id.progressBar));
-        progressBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
