@@ -3,4 +3,29 @@
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/updateInstructions"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/update_instructions"
+            android:id="@+id/updateInstructionsText"
+            android:layout_centerInParent="true"
+            android:textColor="#666" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/updateInstructionsImage"
+            android:src="@drawable/swipe_down" />
+    </LinearLayout>
+
 </RelativeLayout>

@@ -13,12 +13,12 @@ import java.util.List;
  * Created by mikel on 20/05/2015.
  */
 public class PropertyManager {
-    public static final String LAST_MODIFIED_DATE = "lastModified";
+    public static final String KEY_LAST_MODIFIED_DATE = "lastModified";
 
     public static long getLastModifiedDate(){
         final int NO_VALUE = -1;
         try {
-            return getProperty(LAST_MODIFIED_DATE)==null?NO_VALUE:Long.parseLong(getProperty(LAST_MODIFIED_DATE).getValue());
+            return getProperty(KEY_LAST_MODIFIED_DATE)==null?NO_VALUE:Long.parseLong(getProperty(KEY_LAST_MODIFIED_DATE).getValue());
         } catch (SQLException e) {
             e.printStackTrace();
             return NO_VALUE;
@@ -26,7 +26,7 @@ public class PropertyManager {
     }
 
     public static void setLastModifiedDate(long date) throws SQLException {
-        Property property = new Property(LAST_MODIFIED_DATE, String.valueOf(date));
+        Property property = new Property(KEY_LAST_MODIFIED_DATE, String.valueOf(date));
         Dao<Property, String> propertyDao = DaoFactory.getInstance().getPropertyDao();
         propertyDao.createIfNotExists(property);
     }

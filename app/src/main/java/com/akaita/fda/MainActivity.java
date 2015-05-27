@@ -7,12 +7,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.akaita.fda.database.DaoFactory;
+import com.akaita.fda.database.PropertyManager;
 import com.akaita.fda.database.objects.Artist;
 import com.akaita.fda.update.UpdateDatabaseTask;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.SQLException;
 
 public class MainActivity extends AppCompatActivity implements ArtistFragment.OnArtistSelectedListener, ArtistFragment.OnArtistListUpdatedListener {
     public static final String URL_1 = "http://i.img.co/data/data.json";
@@ -23,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements ArtistFragment.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        showUpdateInstructions(!isDataAvailable());
 
         showFragmentArtists();
     }
@@ -94,11 +100,36 @@ public class MainActivity extends AppCompatActivity implements ArtistFragment.On
 
     @Override
     public void onArtistListUpdated() {
-        MainActivityFragment mainActivityFragment = (MainActivityFragment)
-                getSupportFragmentManager().findFragmentByTag(TAG_MAIN_FRAGMENT);
+        if (isDataAvailable()) {
+            showUpdateInstructions(false);
+            MainActivityFragment mainActivityFragment = (MainActivityFragment)
+                    getSupportFragmentManager().findFragmentByTag(TAG_MAIN_FRAGMENT);
 
-        if (mainActivityFragment != null) {
-            mainActivityFragment.updateSlidingTabs();
+            if (mainActivityFragment != null) {
+                mainActivityFragment.updateSlidingTabs();
+            }
+        } else {
+            showUpdateFailed(true);
         }
+    }
+
+    private boolean isDataAvailable() {
+        //Beware: can't use the lastModifiedDate property.
+        //Receiving malformed JSON would set lastModifiedDate, but we still would have no data
+        boolean dataAvailable = false;
+        try {
+            dataAvailable = (DaoFactory.getInstance().getArtistDao().countOf() > 0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataAvailable;
+    }
+
+    private void showUpdateInstructions(boolean show) {
+        this.findViewById(R.id.updateInstructions).setVisibility(show?View.VISIBLE:View.GONE);
+    }
+
+    private void showUpdateFailed(boolean show) {
+        Toast.makeText(this, R.string.update_failed, Toast.LENGTH_LONG);
     }
 }

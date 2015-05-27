@@ -5,4 +5,6 @@
     <string name="album_list_title">Discos</string>
     <string name="action_settings">Configuración</string>
     <string name="genre_all">Todos</string>
+    <string name="update_failed">Error en la actualización</string>
+    <string name="update_instructions">Arrastre abajo para actualizar</string>
 </resources>
