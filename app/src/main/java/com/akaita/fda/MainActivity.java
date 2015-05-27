@@ -3,6 +3,7 @@ package com.akaita.fda;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -116,23 +117,28 @@ public class MainActivity extends AppCompatActivity implements ArtistFragment.On
         try {
             dataAvailable = (DaoFactory.getInstance().getArtistDao().countOf() > 0);
         } catch (SQLException e) {
-            e.printStackTrace();
+            Log.e(getClass().toString(), "SQLException (" + e.getSQLState() + "): " + e.getMessage());
         }
         return dataAvailable;
     }
 
     private void showUpdateInstructions(boolean show) {
+        Log.i(getClass().toString(), "Showing update instructions");
         this.findViewById(R.id.updateInstructions).setVisibility(show?View.VISIBLE:View.GONE);
     }
 
     private void showUpdateFailed(boolean show) {
+        Log.i(getClass().toString(), "Showing 'update-failed' info");
         Toast.makeText(this, R.string.update_failed, Toast.LENGTH_SHORT).show();
     }
 
     private void checkNetworkAccess() {
         if (!NetworkUtils.isNetworkAvailable(this)) {
+            Log.i(getClass().toString(), "Network access: NO");
             Toast.makeText(this, R.string.network_access_error, Toast.LENGTH_SHORT).show();
             Toast.makeText(this, R.string.cant_update_nor_download_images, Toast.LENGTH_SHORT).show();
+        } else {
+            Log.i(getClass().toString(), "Network access: YES");
         }
     }
 }

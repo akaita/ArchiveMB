@@ -15,6 +15,10 @@ import java.util.List;
 public class PropertyManager {
     public static final String KEY_LAST_MODIFIED_DATE = "lastModified";
 
+    /**
+     * LastModifiedTime of the latest JSON downloaded<br>
+     * @return epoch time, or -1 when no value set
+     */
     public static long getLastModifiedDate(){
         final int NO_VALUE = -1;
         try {

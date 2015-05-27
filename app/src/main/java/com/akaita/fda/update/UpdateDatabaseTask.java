@@ -1,6 +1,7 @@
 package com.akaita.fda.update;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.akaita.fda.database.PropertyManager;
 
@@ -17,10 +18,10 @@ import java.util.logging.Logger;
  * Created by mikel on 20/05/2015.
  */
 public class UpdateDatabaseTask extends AsyncTask<URL, Integer, Boolean> {
-    public OnUpdateDatabaseFinishListener delegate;
+    public OnUpdateDatabaseFinishListener mOnUpdateDatabaseFinishListener;
 
     public UpdateDatabaseTask (OnUpdateDatabaseFinishListener onUpdateDatabaseFinishListener){
-        this.delegate = onUpdateDatabaseFinishListener;
+        this.mOnUpdateDatabaseFinishListener = onUpdateDatabaseFinishListener;
     }
 
     protected Boolean doInBackground(URL... urls) {
@@ -44,8 +45,8 @@ public class UpdateDatabaseTask extends AsyncTask<URL, Integer, Boolean> {
     }
 
     protected void onPostExecute(Boolean result) {
-        Logger.getLogger(getClass().getName()).log(Level.INFO, result?"New data downloaded":"No new data to download");
-        delegate.onUpdateDatabaseFinish(result);
+        Logger.getLogger(getClass().getName()).log(Level.INFO, result ? "New data downloaded" : "No new data to download");
+        mOnUpdateDatabaseFinishListener.onUpdateDatabaseFinish(result);
     }
 
     /**
@@ -57,6 +58,7 @@ public class UpdateDatabaseTask extends AsyncTask<URL, Integer, Boolean> {
      * @throws SQLException
      */
     private boolean updateData(URL url) throws SQLException {
+        Log.d(getClass().toString(), "Connect with online database: " + url.toString());
         HttpURLConnection c = null;
         try {
             c = (HttpURLConnection) url.openConnection();
@@ -71,20 +73,22 @@ public class UpdateDatabaseTask extends AsyncTask<URL, Integer, Boolean> {
             long lastModifiedOnline = c.getLastModified();
             if ( lastModifiedOnline != 0
                     && lastModifiedStored != lastModifiedOnline ) {
+                Log.d(getClass().toString(), "Online database: NEW version");
+                Log.d(getClass().toString(), "Online database timestamp: " + String.valueOf(lastModifiedOnline));
                 updateData2(c);
                 PropertyManager.setLastModifiedDate(lastModifiedOnline);
                 return true;
+            } else {
+                Log.d(getClass().toString(), "Online database: OLD version");
             }
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+            Log.e(getClass().toString(), "IOException: " + ex.getMessage());
         } finally {
             if (c != null) {
                 try {
                     c.disconnect();
                 } catch (Exception ex) {
-                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+                    Log.e(getClass().toString(), "Connection error when disconnecting: " + ex.getMessage());
                 }
             }
         }
@@ -101,8 +105,12 @@ public class UpdateDatabaseTask extends AsyncTask<URL, Integer, Boolean> {
                 try {
                     parseAndStore.artistAndAlbums();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    Log.e(getClass().toString(), "SQLException (" +e.getSQLState()+ "): " + e.getMessage());
                 }
+                break;
+            default:
+                Log.e(getClass().toString(), "Unhandled response code: " + String.valueOf(status));
+                break;
         }
     }
 

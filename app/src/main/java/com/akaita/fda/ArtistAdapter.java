@@ -5,6 +5,7 @@ package com.akaita.fda;
  */
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,18 +20,18 @@ import java.util.List;
 
 public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
     public static final String SEPARATOR = " ";
-    OnArtistItemSelectedListener mCallback;
+    private OnArtistItemSelectedListener mOnArtistItemSelectedListener;
 
-    private List<Artist> artistList;
+    private List<Artist> mArtistList;
     private Context mContext;
 
     public ArtistAdapter(Context context) {
         this.mContext = context;
-        artistList = new ArrayList<>();
+        this.mArtistList = new ArrayList<>();
     }
 
     public void setOnArtistItemSelectedListener(OnArtistItemSelectedListener listener) {
-        mCallback = listener;
+        this.mOnArtistItemSelectedListener = listener;
     }
     public interface OnArtistItemSelectedListener {
         void onArtistItemSelected(Artist artist);
@@ -45,40 +46,40 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
     @Override
     public void onBindViewHolder(final ArtistThumbViewHolder holder, final int position) {
         try {
-            holder.getGenreView().setText(concatenate(artistList.get(position).genres(), SEPARATOR));
+            holder.getGenreView().setText(concatenate(mArtistList.get(position).genres(), SEPARATOR));
         } catch (SQLException e) {
-            e.printStackTrace();
+            Log.e(getClass().toString(), "SQLException (" + e.getSQLState() + "): " + e.getMessage());
         }
-        holder.getNameView().setText(artistList.get(position).getName());
-        if (mCallback != null) {
+        holder.getNameView().setText(this.mArtistList.get(position).getName());
+        if (this.mOnArtistItemSelectedListener != null) {
             holder.getRootView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mCallback.onArtistItemSelected(artistList.get(position));
+                    mOnArtistItemSelectedListener.onArtistItemSelected(mArtistList.get(position));
                 }
             });
         }
 
-        SetImage.setImage(mContext, holder.getPictureView(), artistList.get(position).getPictureUrl());
+        SetImage.setImage(mContext, holder.getPictureView(), mArtistList.get(position).getPictureUrl());
     }
 
     @Override
     public int getItemCount() {
-        return artistList.size();
+        return mArtistList.size();
     }
 
     public void add(Artist item, int position) {
-        artistList.add(position, item);
+        mArtistList.add(position, item);
         notifyItemInserted(position);
     }
 
     public void remove(int position) {
-        artistList.remove(position);
+        mArtistList.remove(position);
         notifyItemRemoved(position);
     }
 
     public void removeAll() {
-        for (int i=0 ; i<this.artistList.size() ; i++){
+        for (int i=0 ; i<this.mArtistList.size() ; i++){
             remove(i);
         }
     }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ public class AlbumFragment extends Fragment {
     public static final String EXTRA_ARTIST_ID = "artistId";
     public static final String SEPARATOR = " ";
 
-    private Artist artist;
+    private Artist mArtist;
     private View mView;
     private LinearLayout mLinearLayout;
 
@@ -40,14 +41,13 @@ public class AlbumFragment extends Fragment {
         this.mView = inflater.inflate(R.layout.fragment_album, container, false);
         this.mLinearLayout = (LinearLayout) mView.findViewById(R.id.linearLayout);
 
-        this.artist = getChosenArtist();
+        this.mArtist = getChosenArtist();
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         addHeader();
         addDescription();
         addAlbums();
-
 
         return this.mView;
     }
@@ -58,45 +58,47 @@ public class AlbumFragment extends Fragment {
         Artist artist = null;
         try {
             artist = DaoFactory.getInstance().getArtistDao().queryForId(artistId);
+            Log.d(getClass().toString(), "Seeing artist: " + artist.getName());
         } catch (SQLException e) {
-            e.printStackTrace();
+            Log.e(getClass().toString(), "SQLException (" + e.getSQLState() + "): " + e.getMessage());
         }
         return artist;
     }
 
     private void addHeader() {
         View header = getActivity().getLayoutInflater().inflate(R.layout.artist_details, this.mLinearLayout, false);
-        SetImage.setImage(getActivity(), (ImageView) header.findViewById(R.id.artistImage), this.artist.getPictureUrl());
-        ((TextView)header.findViewById(R.id.artistName)).setText(artist.getName());
+        SetImage.setImage(getActivity(), (ImageView) header.findViewById(R.id.artistImage), this.mArtist.getPictureUrl());
+        ((TextView)header.findViewById(R.id.artistName)).setText(mArtist.getName());
         try {
-            List<Genre> genreList = this.artist.genres();
+            List<Genre> genreList = this.mArtist.genres();
             ((TextView) header.findViewById(R.id.artistGenres)).setText(concatenate(genreList, SEPARATOR));
         } catch (SQLException e) {
-            e.printStackTrace();
+            Log.e(getClass().toString(), "SQLException (" + e.getSQLState() + "): " + e.getMessage());
         }
 
         this.mLinearLayout.addView(header);
     }
 
     private void addDescription() {
-        addtitle(getResources().getString(R.string.artist_details_descrition));
+        addTitle(getResources().getString(R.string.artist_details_descrition));
 
         View text = getActivity().getLayoutInflater().inflate(R.layout.list_text, this.mLinearLayout, false);
-        ((TextView)text.findViewById(R.id.textText)).setText(Html.fromHtml(this.artist.getDescription()));
+        ((TextView)text.findViewById(R.id.textText)).setText(Html.fromHtml(this.mArtist.getDescription()));
         this.mLinearLayout.addView(text);
     }
 
     private void addAlbums() {
         try {
-            List<Album> albumList = artist.albums();
+            List<Album> albumList = mArtist.albums();
+            Log.d(getClass().toString(), "Found album count: " + albumList.size());
             if (!albumList.isEmpty()) {
-                addtitle(getResources().getString(R.string.album_list_title));
+                addTitle(getResources().getString(R.string.album_list_title));
             }
             for (Album album : albumList){
                 addAlbum(album);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Log.e(getClass().toString(), "SQLException (" + e.getSQLState() + "): " + e.getMessage());
         }
     }
 
@@ -107,7 +109,7 @@ public class AlbumFragment extends Fragment {
         this.mLinearLayout.addView(albumView);
     }
 
-    private void addtitle(String titleText) {
+    private void addTitle(String titleText) {
         View title = getActivity().getLayoutInflater().inflate(R.layout.list_title, null, false);
         ((TextView)title.findViewById(R.id.titleText)).setText(titleText);
         this.mLinearLayout.addView(title);

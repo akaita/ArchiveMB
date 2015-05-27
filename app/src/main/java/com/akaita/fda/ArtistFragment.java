@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +34,9 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
     public OnArtistListUpdatedListener mOnArtistListUpdatedListener;
 
     private View mView;
-    private ArtistAdapter artistAdapter;
+    private ArtistAdapter mArtistAdapter;
     private String mGenreId;
-    private SwipeRefreshLayout swipeLayout;
+    private SwipeRefreshLayout mSwipeLayout;
 
     public ArtistFragment() {
     }
@@ -55,13 +56,13 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
-            mOnArtistSelectedListener = (OnArtistSelectedListener) activity;
+            this.mOnArtistSelectedListener = (OnArtistSelectedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnArtistSelectedListener");
         }
         try {
-            mOnArtistListUpdatedListener = (OnArtistListUpdatedListener) activity;
+            this.mOnArtistListUpdatedListener = (OnArtistListUpdatedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnArtistListUpdatedListener");
@@ -73,8 +74,8 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
                              Bundle savedInstanceState) {
         this.mView = inflater.inflate(R.layout.fragment_artist, container, false);
 
-        this.artistAdapter = new ArtistAdapter(getActivity());
-        this.artistAdapter.setOnArtistItemSelectedListener(this);
+        this.mArtistAdapter = new ArtistAdapter(getActivity());
+        this.mArtistAdapter.setOnArtistItemSelectedListener(this);
 
         this.mGenreId = getChosenGenre();
         prepareGridRecyclerView();
@@ -86,21 +87,22 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
     }
 
     private void setSwipeRefreshListener() {
-        swipeLayout = (SwipeRefreshLayout) this.mView.findViewById(R.id.swipe_container);
-        swipeLayout.setOnRefreshListener(this);
-        swipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+        this.mSwipeLayout = (SwipeRefreshLayout) this.mView.findViewById(R.id.swipe_container);
+        this.mSwipeLayout.setOnRefreshListener(this);
+        this.mSwipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
     }
 
     private String getChosenGenre() {
+        String genre = null;
         Bundle bundle = getArguments();
         if (bundle != null) {
-            return bundle.getString(EXTRA_GENRE_ID);
-        } else {
-            return null;
+            genre = bundle.getString(EXTRA_GENRE_ID);
         }
+        Log.d(getClass().toString(), "Detected genre filter: " + genre);
+        return genre;
     }
 
     private void prepareGridRecyclerView(){
@@ -115,16 +117,16 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
         int columns = JavaUtils.getColumns(getActivity(), COLUMN_SIZE_INCHES);
 
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(columns, StaggeredGridLayoutManager.VERTICAL));
-        recyclerView.setAdapter(this.artistAdapter);
+        recyclerView.setAdapter(this.mArtistAdapter);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
                 int totalItemCount = recyclerView.getLayoutManager().getItemCount();
                 int[] lastVisibleItem = ((StaggeredGridLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPositions(null);
 
                 if ((JavaUtils.findMax(lastVisibleItem) + 1) == totalItemCount) {
+                    Log.d(getClass().toString(), "Detected scroll end");
                     loadMoreItems();
                 }
             }
@@ -138,33 +140,35 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
     private void loadMoreItems() {
         List<Artist> newArtistList = null;
         try {
-            newArtistList = RangedQuery.getArtistRangeByGenre(artistAdapter.getItemCount(), PAGE_SIZE, this.mGenreId);
+            newArtistList = RangedQuery.getArtistRangeByGenre(mArtistAdapter.getItemCount(), PAGE_SIZE, this.mGenreId);
         } catch (SQLException e) {
-            e.printStackTrace();
+            Log.e(getClass().toString(), "SQLException (" + e.getSQLState() + "): " + e.getMessage());
         }
         for (Artist artist : newArtistList){
-            artistAdapter.add(artist, artistAdapter.getItemCount());
+            this.mArtistAdapter.add(artist, mArtistAdapter.getItemCount());
         }
     }
 
     @Override
     public void onArtistItemSelected(Artist artist) {
-        mOnArtistSelectedListener.onArtistSelected(artist);
+        this.mOnArtistSelectedListener.onArtistSelected(artist);
     }
 
     @Override
     public void onRefresh() {
         if (!NetworkUtils.isNetworkAvailable(getActivity())) {
+            Log.i(getClass().toString(), "Internet access: NO");
             Toast.makeText(getActivity(), R.string.network_access_error, Toast.LENGTH_SHORT).show();
             finishRefreshUI();
-            swipeLayout.setRefreshing(false);
+            this.mSwipeLayout.setRefreshing(false);
         } else {
+            Log.i(getClass().toString(), "Internet access: YES");
             URL url1 = null;
             try {
                 url1 = new URL(MainActivity.URL_1);
                 new UpdateDatabaseTask(this).execute(url1);
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+                Log.e(getClass().toString(), "Malformed URL: " + e.getMessage());
             }
         }
     }
@@ -173,18 +177,12 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
     public void onUpdateDatabaseFinish(boolean newData) {
         finishRefreshUI();
         if (newData){
-            mOnArtistListUpdatedListener.onArtistListUpdated();
-        }
-    }
-
-    private void checkNetworkAccess() {
-        if (!NetworkUtils.isNetworkAvailable(getActivity())) {
-            Toast.makeText(getActivity(), R.string.network_access_error, Toast.LENGTH_LONG).show();
+            this.mOnArtistListUpdatedListener.onArtistListUpdated();
         }
     }
 
     private void finishRefreshUI(){
-        swipeLayout.setRefreshing(false);
+        this.mSwipeLayout.setRefreshing(false);
     }
 
 }

@@ -9,32 +9,32 @@ import android.widget.TextView;
  * Created by mikel on 20/05/2015.
  */
 public class ArtistThumbViewHolder extends RecyclerView.ViewHolder {
-    private TextView nameView;
-    private TextView genreView;
-    private ImageView pictureView;
-    private View rootView;
+    private TextView mNameView;
+    private TextView mGenreView;
+    private ImageView mPictureView;
+    private View mRootView;
 
     public ArtistThumbViewHolder(View itemView) {
         super(itemView);
-        nameView = (TextView) itemView.findViewById(R.id.artistName);
-        genreView = (TextView) itemView.findViewById(R.id.artistGenres);
-        pictureView = (ImageView) itemView.findViewById(R.id.imageView);
-        rootView = itemView;
+        this.mNameView = (TextView) itemView.findViewById(R.id.artistName);
+        this.mGenreView = (TextView) itemView.findViewById(R.id.artistGenres);
+        this.mPictureView = (ImageView) itemView.findViewById(R.id.imageView);
+        this.mRootView = itemView;
     }
 
     public TextView getNameView() {
-        return nameView;
+        return this.mNameView;
     }
 
     public TextView getGenreView() {
-        return genreView;
+        return this.mGenreView;
     }
 
     public ImageView getPictureView() {
-        return pictureView;
+        return this.mPictureView;
     }
 
     public View getRootView() {
-        return rootView;
+        return this.mRootView;
     }
 }

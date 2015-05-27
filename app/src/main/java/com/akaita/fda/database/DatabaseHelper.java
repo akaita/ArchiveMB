@@ -2,6 +2,7 @@ package com.akaita.fda.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.akaita.fda.database.objects.Album;
 import com.akaita.fda.database.objects.Artist;
@@ -29,6 +30,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db, ConnectionSource connectionSource) {
+        Log.i(getClass().toString(), "Creating database");
         try {
             TableUtils.createTable(connectionSource, Artist.class);
             TableUtils.createTable(connectionSource, ArtistAlbum.class);
@@ -44,6 +46,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, ConnectionSource connectionSource, int oldVersion, int newVersion) {
+        Log.i(getClass().toString(), "Upgrading database: " + String.valueOf(oldVersion)+"-->"+String.valueOf(newVersion) );
+        dropDatabase(db);
+    }
+
+    private void dropDatabase(SQLiteDatabase db) {
+        Log.i(getClass().toString(), "Dropping database: " + db.toString() );
         try {
             TableUtils.dropTable(connectionSource, Artist.class, true);
             TableUtils.dropTable(connectionSource, ArtistAlbum.class, true);
@@ -56,6 +64,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
     }
 
 }

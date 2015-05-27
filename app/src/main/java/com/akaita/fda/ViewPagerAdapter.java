@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     private String mNames[];
@@ -15,11 +16,14 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        Log.i(getClass().toString(), "Selected tab: " + String.valueOf(position));
 
         if(position == 0)
         {
+            Log.i(getClass().toString(), "Showing first tab");
             return new ArtistFragment();
         } else {
+            Log.i(getClass().toString(), "Showing 'not-first' tab");
             Bundle bundle = new Bundle();
             bundle.putString(ArtistFragment.EXTRA_GENRE_ID, mNames[position]);
 
@@ -41,9 +45,5 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return this.mNames.length;
-    }
-
-    public void updateNames(String[] names) {
-        this.mNames = names;
     }
 }

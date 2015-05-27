@@ -3,6 +3,7 @@ package com.akaita.fda.async;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -28,6 +29,7 @@ public class SetImage {
     public static void setImage(Context context, final ImageView imageView, String url) {
         switch (method){
             case ASYNCTASK:
+                Log.d(getMethod().toString(), "Asynctack method, downloading image: " + url);
                 Uri imageUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
                         context.getResources().getResourcePackageName(R.drawable.image_download_placeholder) + '/' +
                         context.getResources().getResourceTypeName(R.drawable.image_download_placeholder) + '/' +
@@ -36,6 +38,7 @@ public class SetImage {
                 new DownloadImageTask(imageView).execute(url);
                 break;
             case CACHE:
+                Log.d(getMethod().toString(), "Cached method, downloading image: " + url);
                 Picasso.with(context).load(url)
                         .placeholder(R.drawable.image_download_placeholder)
                         .error(R.drawable.image_download_error)

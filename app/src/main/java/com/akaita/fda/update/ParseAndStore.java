@@ -2,6 +2,7 @@ package com.akaita.fda.update;
 
 import android.util.JsonReader;
 import android.util.JsonToken;
+import android.util.Log;
 
 import com.akaita.fda.database.objects.Album;
 import com.akaita.fda.database.objects.Artist;
@@ -21,18 +22,17 @@ import java.sql.SQLException;
  * Created by mikel on 19/05/2015.
  */
 public class ParseAndStore {
-
-    JsonReader jsonReader;
-    DatabaseConnection dbConn;
-    Dao<Album, Long> albumDao;
-    Dao<ArtistAlbum, Integer> artistAlbumDao;
-    Dao<ArtistGenre, Integer> artistGenreDao;
-    Dao<Artist, Long> artistDao;
-    Dao<Genre, String> genreDao;
-    Dao<Type, String> typeDao;
+    private JsonReader mJsonReader;
+    private DatabaseConnection mDbConn;
+    private Dao<Album, Long> mAlbumDao;
+    private Dao<ArtistAlbum, Integer> mArtistAlbumDao;
+    private Dao<ArtistGenre, Integer> mArtistGenreDao;
+    private Dao<Artist, Long> mArtistDao;
+    private Dao<Genre, String> mGenreDao;
+    private Dao<Type, String> mTypeDao;
 
     public ParseAndStore(InputStreamReader streamReader) {
-        this.jsonReader = new JsonReader(streamReader);
+        this.mJsonReader = new JsonReader(streamReader);
     }
 
     public void artistAndAlbums() throws SQLException {
@@ -76,21 +76,23 @@ public class ParseAndStore {
         prepareDbBatch();
 
         try {
-            this.jsonReader.beginObject();
-            while( this.jsonReader.hasNext() ){
-                final String objName = this.jsonReader.nextName();
-                final boolean isNull = this.jsonReader.peek() == JsonToken.NULL;
+            Log.d(getClass().toString(), "Download and parse database: START");
+            this.mJsonReader.beginObject();
+            while( this.mJsonReader.hasNext() ){
+                final String objName = this.mJsonReader.nextName();
+                final boolean isNull = this.mJsonReader.peek() == JsonToken.NULL;
                 if( objName.equals( "artists" ) && !isNull ) {
                     readArtistArray();
                 } else if ( objName.equals( "albums" ) && !isNull ) {
                     readAlbumArray();
                 } else {
-                    this.jsonReader.skipValue();
+                    this.mJsonReader.skipValue();
                 }
             }
-            this.jsonReader.endObject();
+            this.mJsonReader.endObject();
+            Log.d(getClass().toString(), "Download and parse database: FINISH");
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.d(getClass().toString(), e.getMessage());
             abortDbBatch();
         }
 
@@ -98,123 +100,126 @@ public class ParseAndStore {
     }
 
     private void readArtistArray() throws IOException, SQLException {
-        this.jsonReader.beginArray();
-        while( this.jsonReader.hasNext() ) {
+        this.mJsonReader.beginArray();
+        while( this.mJsonReader.hasNext() ) {
             readArtist();
         }
-        this.jsonReader.endArray();
+        this.mJsonReader.endArray();
     }
 
     private void readAlbumArray() throws IOException, SQLException {
-        this.jsonReader.beginArray();
-        while( this.jsonReader.hasNext() ) {
+        this.mJsonReader.beginArray();
+        while( this.mJsonReader.hasNext() ) {
             readAlbum();
         }
-        this.jsonReader.endArray();
+        this.mJsonReader.endArray();
     }
 
     private void readArtist() throws IOException, SQLException {
-        this.jsonReader.beginObject();
+        this.mJsonReader.beginObject();
         Long id = 0L;
         String[] genres = null;
         String pictureUrl = null;
         String name = null;
         String description = null;
-        while( this.jsonReader.hasNext() ) {
-            final String innerInnerName = this.jsonReader.nextName();
-            final boolean isInnerInnerNull = this.jsonReader.peek() == JsonToken.NULL;
+        while( this.mJsonReader.hasNext() ) {
+            final String innerInnerName = this.mJsonReader.nextName();
+            final boolean isInnerInnerNull = this.mJsonReader.peek() == JsonToken.NULL;
             if (innerInnerName.equals("id") && !isInnerInnerNull) {
-                id = this.jsonReader.nextLong();
+                id = this.mJsonReader.nextLong();
             } else if (innerInnerName.equals("genres") && !isInnerInnerNull) {
-                genres = this.jsonReader.nextString().split(",");
+                genres = this.mJsonReader.nextString().split(",");
             } else if (innerInnerName.equals("picture") && !isInnerInnerNull) {
-                pictureUrl = this.jsonReader.nextString().trim();
+                pictureUrl = this.mJsonReader.nextString().trim();
             } else if (innerInnerName.equals("name") && !isInnerInnerNull) {
-                name = this.jsonReader.nextString().trim();
+                name = this.mJsonReader.nextString().trim();
             } else if (innerInnerName.equals("description") && !isInnerInnerNull) {
-                description = this.jsonReader.nextString().trim();
+                description = this.mJsonReader.nextString().trim();
             } else {
-                this.jsonReader.skipValue();
+                this.mJsonReader.skipValue();
             }
         }
-        this.jsonReader.endObject();
+        this.mJsonReader.endObject();
 
         saveArtistObject(id, name, description, pictureUrl, genres);
     }
 
     private void readAlbum() throws IOException, SQLException {
-        this.jsonReader.beginObject();
+        this.mJsonReader.beginObject();
         Long id = 0L;
         Long artistId = 0L;
         String title = null;
         String typeStr = null;
         String pictureUrl = null;
-        while( this.jsonReader.hasNext() ) {
-            final String innerInnerName = this.jsonReader.nextName();
-            final boolean isInnerInnerNull = this.jsonReader.peek() == JsonToken.NULL;
+        while( this.mJsonReader.hasNext() ) {
+            final String innerInnerName = this.mJsonReader.nextName();
+            final boolean isInnerInnerNull = this.mJsonReader.peek() == JsonToken.NULL;
             if (innerInnerName.equals("id") && !isInnerInnerNull) {
-                id = this.jsonReader.nextLong();
+                id = this.mJsonReader.nextLong();
             } else if (innerInnerName.equals("artistId") && !isInnerInnerNull) {
-                artistId = this.jsonReader.nextLong();
+                artistId = this.mJsonReader.nextLong();
             } else if (innerInnerName.equals("title") && !isInnerInnerNull) {
-                title = this.jsonReader.nextString().trim();
+                title = this.mJsonReader.nextString().trim();
             } else if (innerInnerName.equals("type") && !isInnerInnerNull) {
-                typeStr = this.jsonReader.nextString().trim();
+                typeStr = this.mJsonReader.nextString().trim();
             } else if (innerInnerName.equals("picture") && !isInnerInnerNull) {
-                pictureUrl = this.jsonReader.nextString().trim();
+                pictureUrl = this.mJsonReader.nextString().trim();
             } else {
-                this.jsonReader.skipValue();
+                this.mJsonReader.skipValue();
             }
         }
-        this.jsonReader.endObject();
+        this.mJsonReader.endObject();
 
         saveAlbumObject(id, artistId, title, pictureUrl, typeStr);
     }
 
     private void saveArtistObject(Long id, String name, String description, String pictureUrl, String[] genres) throws SQLException {
         Artist artist = new Artist(id, name, description, pictureUrl);
-        this.artistDao.createIfNotExists(artist);
+        this.mArtistDao.createIfNotExists(artist);
 
         for (String genreString : genres) {
             Genre genre = new Genre(genreString.trim());
-            this.genreDao.createIfNotExists(genre);
+            this.mGenreDao.createIfNotExists(genre);
 
             ArtistGenre artistGenre = new ArtistGenre(artist, genre);
-            this.artistGenreDao.createIfNotExists(artistGenre);
+            this.mArtistGenreDao.createIfNotExists(artistGenre);
         }
     }
 
     private void saveAlbumObject(Long id, Long artistId, String title, String pictureUrl, String typeStr) throws SQLException {
         Type type = new Type(typeStr);
-        this.typeDao.createIfNotExists(type);
+        this.mTypeDao.createIfNotExists(type);
 
         Album album = new Album(id, title, type, pictureUrl);
-        this.albumDao.createIfNotExists(album);
+        this.mAlbumDao.createIfNotExists(album);
 
         Artist dummyArtist = new Artist(artistId, null,null, null);
         ArtistAlbum artistAlbum = new ArtistAlbum(dummyArtist, album);
-        this.artistAlbumDao.createIfNotExists(artistAlbum);
+        this.mArtistAlbumDao.createIfNotExists(artistAlbum);
     }
 
     private void prepareDbBatch() throws SQLException {
-        this.albumDao = DaoFactory.getInstance().getAlbumDao();
-        this.artistDao = DaoFactory.getInstance().getArtistDao();
-        this.artistAlbumDao = DaoFactory.getInstance().getArtistAlbumDao();
-        this.artistGenreDao = DaoFactory.getInstance().getArtistGenreDao();
-        this.genreDao = DaoFactory.getInstance().getGenreDao();
-        this.typeDao = DaoFactory.getInstance().getTypeDao();
+        Log.d(getClass().toString(), "Batch database update: START");
+        this.mAlbumDao = DaoFactory.getInstance().getAlbumDao();
+        this.mArtistDao = DaoFactory.getInstance().getArtistDao();
+        this.mArtistAlbumDao = DaoFactory.getInstance().getArtistAlbumDao();
+        this.mArtistGenreDao = DaoFactory.getInstance().getArtistGenreDao();
+        this.mGenreDao = DaoFactory.getInstance().getGenreDao();
+        this.mTypeDao = DaoFactory.getInstance().getTypeDao();
 
-        this.dbConn = artistDao.startThreadConnection();
-        this.artistDao.setAutoCommit(dbConn, false);
+        this.mDbConn = mArtistDao.startThreadConnection();
+        this.mArtistDao.setAutoCommit(mDbConn, false);
     }
 
     private void finishDbBatch() throws SQLException {
-        this.artistDao.commit(dbConn);
-        this.artistDao.setAutoCommit(dbConn, true);
+        Log.d(getClass().toString(), "Batch database update: FINISH");
+        this.mArtistDao.commit(mDbConn);
+        this.mArtistDao.setAutoCommit(mDbConn, true);
     }
 
     private void abortDbBatch() throws SQLException {
-        this.artistDao.rollBack(dbConn);
-        this.artistDao.setAutoCommit(dbConn, true);
+        Log.d(getClass().toString(), "Batch database update: ABORT");
+        this.mArtistDao.rollBack(mDbConn);
+        this.mArtistDao.setAutoCommit(mDbConn, true);
     }
 }
