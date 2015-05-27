@@ -1,4 +1,4 @@
-package com.akaita.fda;
+package com.akaita.fda.async;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.akaita.fda.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 

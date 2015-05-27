@@ -1,15 +1,15 @@
-package com.akaita.fda;
+package com.akaita.fda.update;
 
 import android.util.JsonReader;
 import android.util.JsonToken;
 
-import com.akaita.fda.database.Album;
-import com.akaita.fda.database.Artist;
-import com.akaita.fda.database.ArtistAlbum;
-import com.akaita.fda.database.ArtistGenre;
+import com.akaita.fda.database.objects.Album;
+import com.akaita.fda.database.objects.Artist;
+import com.akaita.fda.database.objects.ArtistAlbum;
+import com.akaita.fda.database.objects.ArtistGenre;
 import com.akaita.fda.database.DaoFactory;
-import com.akaita.fda.database.Genre;
-import com.akaita.fda.database.Type;
+import com.akaita.fda.database.objects.Genre;
+import com.akaita.fda.database.objects.Type;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.DatabaseConnection;
 

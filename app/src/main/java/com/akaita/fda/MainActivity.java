@@ -8,7 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.akaita.fda.database.Artist;
+import com.akaita.fda.database.objects.Artist;
+import com.akaita.fda.update.UpdateDatabaseTask;
 
 import java.net.MalformedURLException;
 import java.net.URL;

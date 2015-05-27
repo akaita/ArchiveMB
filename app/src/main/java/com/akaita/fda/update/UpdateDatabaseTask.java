@@ -1,7 +1,6 @@
-package com.akaita.fda;
+package com.akaita.fda.update;
 
 import android.os.AsyncTask;
-import android.widget.ProgressBar;
 
 import com.akaita.fda.database.PropertyManager;
 

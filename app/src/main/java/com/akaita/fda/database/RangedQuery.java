@@ -1,5 +1,8 @@
 package com.akaita.fda.database;
 
+import com.akaita.fda.database.objects.Artist;
+import com.akaita.fda.database.objects.ArtistGenre;
+import com.akaita.fda.database.objects.Genre;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;

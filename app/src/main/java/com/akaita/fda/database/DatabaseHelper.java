@@ -3,6 +3,13 @@ package com.akaita.fda.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.akaita.fda.database.objects.Album;
+import com.akaita.fda.database.objects.Artist;
+import com.akaita.fda.database.objects.ArtistAlbum;
+import com.akaita.fda.database.objects.ArtistGenre;
+import com.akaita.fda.database.objects.Genre;
+import com.akaita.fda.database.objects.Property;
+import com.akaita.fda.database.objects.Type;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;

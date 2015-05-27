@@ -11,10 +11,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.akaita.fda.database.Album;
-import com.akaita.fda.database.Artist;
+import com.akaita.fda.async.SetImage;
+import com.akaita.fda.database.objects.Album;
+import com.akaita.fda.database.objects.Artist;
 import com.akaita.fda.database.DaoFactory;
-import com.akaita.fda.database.Genre;
+import com.akaita.fda.database.objects.Genre;
 
 import java.sql.SQLException;
 import java.util.List;

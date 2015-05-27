@@ -2,6 +2,13 @@ package com.akaita.fda.database;
 
 import android.app.Application;
 
+import com.akaita.fda.database.objects.Album;
+import com.akaita.fda.database.objects.Artist;
+import com.akaita.fda.database.objects.ArtistAlbum;
+import com.akaita.fda.database.objects.ArtistGenre;
+import com.akaita.fda.database.objects.Genre;
+import com.akaita.fda.database.objects.Property;
+import com.akaita.fda.database.objects.Type;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 

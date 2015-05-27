@@ -1,4 +1,4 @@
-package com.akaita.fda;
+package com.akaita.fda.async;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

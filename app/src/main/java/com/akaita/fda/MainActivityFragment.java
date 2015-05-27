@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.akaita.fda.database.DaoFactory;
-import com.akaita.fda.database.Genre;
+import com.akaita.fda.database.objects.Genre;
 
 import java.sql.SQLException;
 import java.util.List;

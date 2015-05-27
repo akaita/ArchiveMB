@@ -1,4 +1,4 @@
-package com.akaita.fda.database;
+package com.akaita.fda.database.objects;
 
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
