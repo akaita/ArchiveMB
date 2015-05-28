@@ -29,7 +29,6 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
     public static final String EXTRA_GENRE_ID = "genre";
 
     final static float COLUMN_SIZE_INCHES = 1;
-    final static int PAGE_SIZE = 10;
     final static ArtistAdapter.ViewType mViewType = ArtistAdapter.ViewType.THUMB;
 
     private OnArtistSelectedListener mOnArtistSelectedListener;
@@ -159,7 +158,8 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
     private void loadMoreItems() {
         List<Artist> newArtistList = null;
         try {
-            newArtistList = RangedQuery.getArtistRangeByGenre(mArtistAdapter.getItemCount(), PAGE_SIZE, this.mGenreId);
+            PreferencesManager preferencesManager = new PreferencesManager(getActivity());
+            newArtistList = RangedQuery.getArtistRangeByGenre(mArtistAdapter.getItemCount(), preferencesManager.getPageSize(), this.mGenreId);
         } catch (SQLException e) {
             Log.e(getClass().toString(), "SQLException (" + e.getSQLState() + "): " + e.getMessage());
         }
@@ -184,11 +184,12 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
             Log.i(getClass().toString(), "Internet access: YES");
             URL url1 = null;
             try {
-                url1 = new URL(MainActivity.URL_1);
                 PreferencesManager preferencesManager = new PreferencesManager(getActivity());
+                url1 = new URL(preferencesManager.getDatabaseUrl());
                 new UpdateDatabaseTask(this, preferencesManager).execute(url1);
             } catch (MalformedURLException e) {
                 Log.e(getClass().toString(), "Malformed URL: " + e.getMessage());
+                this.onUpdateDatabaseFinish(false);
             }
         }
     }

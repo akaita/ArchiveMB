@@ -17,4 +17,8 @@
     <string name="prefsumm_cache_image_enable">Caching images will help avoid redownloading images</string>
     <string name="preftit_cache_image_indicator">Show cached images indicator</string>
     <string name="prefsumm_cache_image_indicator">Show indicator on top-right for downloaded(red), fromDisk(blue), fromMemory(green)</string>
+    <string name="preftit_page_size">Page size</string>
+    <string name="prefsumm_page_size">How many images will be downloaded at once</string>
+    <string name="preftit_db_url">Database URL</string>
+    <string name="prefsumm_db_url">Databse URL</string>
 </resources>

@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <EditTextPreference
+        android:key="@string/pref_db_url"
+        android:title="@string/preftit_db_url"
+        android:summary="@string/prefsumm_db_url"
+        android:defaultValue="http://i.img.co/data/data.json"
+        android:editable="false"
+        android:enabled="false" />
+    <EditTextPreference
         android:key="@string/pref_last_modified_time"
         android:title="@string/preftit_last_modified"
         android:summary="@string/prefsumm_last_modified"
@@ -19,4 +26,10 @@
         android:summary="@string/prefsumm_cache_image_indicator"
         android:defaultValue="false"
         android:dependency="@string/pref_cache_image_enable" />
+    <EditTextPreference
+        android:key="@string/pref_page_size"
+        android:title="@string/preftit_page_size"
+        android:summary="@string/prefsumm_page_size"
+        android:defaultValue="10"
+        android:numeric="integer" />
 </PreferenceScreen>

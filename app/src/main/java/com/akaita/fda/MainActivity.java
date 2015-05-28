@@ -17,7 +17,6 @@ import com.akaita.fda.imagedownload.SetImage;
 import java.sql.SQLException;
 
 public class MainActivity extends AppCompatActivity implements ArtistFragment.OnArtistSelectedListener, ArtistFragment.OnArtistListUpdatedListener {
-    public static final String URL_1 = "http://i.img.co/data/data.json";
     public static final String TAG_MAIN_FRAGMENT = "main_fragment";
     public static final String TAG_ALBUM_FRAGMENT = "album_fragment";
 
@@ -47,9 +46,8 @@ public class MainActivity extends AppCompatActivity implements ArtistFragment.On
 
         switch (id) {
             case R.id.action_settings:
-                Intent i = new Intent(this, PreferencesActivity.class);
-                startActivity(i);
-                break;
+                launchPreferences();
+               break;
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -80,14 +78,12 @@ public class MainActivity extends AppCompatActivity implements ArtistFragment.On
     }
 
     private void showFragmentAlbum(Artist artist) {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Bundle bundl = new Bundle();
-        bundl.putLong(AlbumFragment.EXTRA_ARTIST_ID, artist.getId());
+        Bundle bundle = new Bundle();
+        bundle.putLong(AlbumFragment.EXTRA_ARTIST_ID, artist.getId());
 
         // Create new fragment and transaction
         AlbumFragment newFragment = new AlbumFragment();
-        newFragment.setArguments(bundl);
+        newFragment.setArguments(bundle);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -152,5 +148,10 @@ public class MainActivity extends AppCompatActivity implements ArtistFragment.On
         PreferencesManager preferencesManager = new PreferencesManager(this);
         SetImage.setMethod(preferencesManager.isCacheImageEnabled() ? SetImage.Method.CACHE : SetImage.Method.ASYNCTASK);
         SetImage.setCacheIndicatorEnabled(preferencesManager.isCacheImageIndicatorEnabled());
+    }
+
+    private void launchPreferences() {
+        Intent i = new Intent(this, PreferencesActivity.class);
+        startActivity(i);
     }
 }

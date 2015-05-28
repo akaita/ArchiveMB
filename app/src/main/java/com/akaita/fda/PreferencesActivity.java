@@ -33,6 +33,8 @@ public class PreferencesActivity extends PreferenceActivity {
 
             Preference lastModified = findPreference(getResources().getString(R.string.pref_last_modified_time));
             lastModified.setSummary(new Date(preferencesManager.getLastModifiedDate()).toString());
+            Preference dbUrl = findPreference(getResources().getString(R.string.pref_db_url));
+            dbUrl.setSummary(preferencesManager.getDatabaseUrl());
             Preference cache = findPreference(getResources().getString(R.string.pref_cache_image_enable));
             cache.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
