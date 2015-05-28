@@ -6,9 +6,9 @@
     android:layout_gravity="center"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_margin="4dp">
+    android:layout_margin="2dp">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -24,36 +24,37 @@
             android:scaleType="fitXY"
             android:adjustViewBounds="true" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Small Text"
-            android:id="@+id/artistName"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentStart="false"
-            android:autoText="false"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp" />
+            android:background="#9222"
+            android:layout_alignParentBottom="true">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Small Text"
-            android:id="@+id/artistGenres"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentStart="false"
-            android:autoText="false"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="30dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Small Text"
+                android:id="@+id/artistName"
+                android:autoText="false"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_above="@+id/artistGenres"
+                android:textColor="#fff" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Small Text"
+                android:id="@+id/artistGenres"
+                android:autoText="false"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="2dp"
+                android:textColor="#ddd" />
+        </LinearLayout>
 
 
-    </LinearLayout>
+    </RelativeLayout>
 </android.support.v7.widget.CardView>
