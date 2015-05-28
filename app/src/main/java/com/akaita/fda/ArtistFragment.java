@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -29,6 +30,7 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
 
     final static float COLUMN_SIZE_INCHES = 1;
     final static int PAGE_SIZE = 10;
+    final static ArtistAdapter.ViewType mViewType = ArtistAdapter.ViewType.THUMB;
 
     private OnArtistSelectedListener mOnArtistSelectedListener;
     public OnArtistListUpdatedListener mOnArtistListUpdatedListener;
@@ -76,6 +78,7 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
 
         this.mArtistAdapter = new ArtistAdapter(getActivity());
         this.mArtistAdapter.setOnArtistItemSelectedListener(this);
+        this.mArtistAdapter.setViewType(this.mViewType);
 
         this.mGenreId = getChosenGenre();
         prepareGridRecyclerView();
@@ -116,16 +119,32 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
 
         int columns = JavaUtils.getColumns(getActivity(), COLUMN_SIZE_INCHES);
 
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(columns, StaggeredGridLayoutManager.VERTICAL));
+        switch (mViewType){
+            case THUMB:
+                recyclerView.setLayoutManager(new StaggeredGridLayoutManager(columns, StaggeredGridLayoutManager.VERTICAL));
+                break;
+            case LIST:
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                break;
+        }
         recyclerView.setAdapter(this.mArtistAdapter);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 int totalItemCount = recyclerView.getLayoutManager().getItemCount();
-                int[] lastVisibleItem = ((StaggeredGridLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPositions(null);
 
-                if ((JavaUtils.findMax(lastVisibleItem) + 1) == totalItemCount) {
+                int lastVisibleItem = 0;
+                switch (mViewType){
+                    case THUMB:
+                        lastVisibleItem = JavaUtils.findMax(
+                                ((StaggeredGridLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPositions(null));
+                        break;
+                    case LIST:
+                        lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                }
+
+                if ((lastVisibleItem + 1) == totalItemCount) {
                     Log.d(getClass().toString(), "Detected scroll end");
                     loadMoreItems();
                 }
