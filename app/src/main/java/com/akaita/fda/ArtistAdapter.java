@@ -24,10 +24,28 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
 
     private List<Artist> mArtistList;
     private Context mContext;
+    private ViewType mViewType;
+
+    public enum ViewType {
+        THUMB,
+        LIST;
+
+        public static ViewType valueOf(int type) {
+            for (ViewType i : ViewType.values()) {
+                if (i.ordinal() == type) return i;
+            }
+            throw new IllegalArgumentException("ViewType not found");
+        }
+
+        public int toInt() {
+            return this.ordinal();
+        }
+    }
 
     public ArtistAdapter(Context context) {
         this.mContext = context;
         this.mArtistList = new ArrayList<>();
+        this.mViewType = ViewType.THUMB;
     }
 
     public void setOnArtistItemSelectedListener(OnArtistItemSelectedListener listener) {
@@ -39,7 +57,17 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
 
     @Override
     public ArtistThumbViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.artist_thumb_card, parent, false);
+        int layout = 0;
+        ViewType type = ViewType.valueOf(viewType);
+        switch (type){
+            case THUMB:
+                layout = R.layout.artist_thumb_card;
+                break;
+            case LIST:
+                layout = R.layout.artist_list_item;
+                break;
+        }
+        View view = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
         return new ArtistThumbViewHolder(view);
     }
 
@@ -91,5 +119,15 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
             result.append( separator );
         }
         return result.delete(result.length()-separator.length(), result.length()).toString();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return this.mViewType.toInt();
+    }
+
+    public void setViewType(ViewType viewType) {
+        this.mViewType = viewType;
+        this.notifyDataSetChanged();
     }
 }
