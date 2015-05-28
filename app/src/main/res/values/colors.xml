@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ColorPrimary">#e62117</color>
-    <color name="ColorPrimaryDark">#c31c13</color>
+    <color name="colorPrimary">#e62117</color>
+    <color name="colorPrimaryDark">#c31c13</color>
     <color name="tabsScrollColor">#8a140e</color>
+    <color name="colorTextStrong">#666</color>
+    <color name="colorTextLight">#999</color>
+    <color name="colorTextStrongInverse">#fff</color>
+    <color name="colorTextLightInverse">#ddd</color>
+    <color name="colorImageOverlayTextBackground">#9222</color>
 
 </resources>

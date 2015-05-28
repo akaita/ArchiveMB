@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FDA</string>
+    <string name="app_name" translatable="false">ArchiveMB</string>
     <string name="artist_details_descrition">Description</string>
     <string name="album_list_title">Albums</string>
     <string name="action_settings">Settings</string>

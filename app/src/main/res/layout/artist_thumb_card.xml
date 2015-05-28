@@ -6,7 +6,7 @@
     android:layout_gravity="center"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_margin="2dp">
+    android:layout_margin="@dimen/item_margin_small">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
@@ -28,7 +28,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#9222"
+            android:background="@color/colorImageOverlayTextBackground"
             android:layout_alignParentBottom="true">
 
             <TextView
@@ -38,10 +38,10 @@
                 android:text="Small Text"
                 android:id="@+id/artistName"
                 android:autoText="false"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginLeft="@dimen/item_margin_medium"
+                android:layout_marginTop="@dimen/item_margin_small"
                 android:layout_above="@+id/artistGenres"
-                android:textColor="#fff" />
+                android:textColor="@color/colorTextStrongInverse" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -50,9 +50,9 @@
                 android:text="Small Text"
                 android:id="@+id/artistGenres"
                 android:autoText="false"
-                android:layout_marginLeft="5dp"
-                android:layout_marginBottom="2dp"
-                android:textColor="#ddd" />
+                android:layout_marginLeft="@dimen/item_margin_medium"
+                android:layout_marginBottom="@dimen/item_margin_small"
+                android:textColor="@color/colorTextLightInverse" />
         </LinearLayout>
 
 

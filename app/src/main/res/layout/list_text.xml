@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/textLayout"
-    android:elevation="2dp"
-    android:paddingTop="5dp"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp">
+    android:elevation="@dimen/item_margin_small"
+    android:paddingTop="@dimen/item_margin_medium"
+    android:paddingLeft="@dimen/item_margin_medium"
+    android:paddingRight="@dimen/item_margin_medium">
 
     <TextView
         android:layout_width="wrap_content"
@@ -17,5 +17,5 @@
         android:id="@+id/textText"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:textColor="#999" />
+        android:textColor="@color/colorTextLight" />
 </RelativeLayout>

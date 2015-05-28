@@ -5,16 +5,16 @@
     android:layout_height="wrap_content"
     android:id="@+id/albumView"
     android:background="#ccc"
-    android:elevation="2dp">
+    android:elevation="@dimen/item_margin_small">
     <android.support.v7.widget.CardView
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_margin="@dimen/item_margin_medium"
         android:id="@+id/albumImageCard"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="@dimen/item_margin_large">
         <ImageView
-            android:layout_width="150dp"
+            android:layout_width="@dimen/album_details_image_height"
             android:layout_height="wrap_content"
             android:id="@+id/artistImage"
             android:scaleType="fitCenter"
@@ -28,7 +28,7 @@
         android:text="Small Text"
         android:id="@+id/artistName"
         android:layout_toRightOf="@+id/albumImageCard"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="@dimen/item_margin_medium" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -38,6 +38,6 @@
         android:id="@+id/artistGenres"
         android:layout_toRightOf="@+id/albumImageCard"
         android:layout_below="@+id/artistName"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="@dimen/item_margin_medium" />
 
 </RelativeLayout>
