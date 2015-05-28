@@ -7,7 +7,6 @@ import com.akaita.fda.database.objects.Artist;
 import com.akaita.fda.database.objects.ArtistAlbum;
 import com.akaita.fda.database.objects.ArtistGenre;
 import com.akaita.fda.database.objects.Genre;
-import com.akaita.fda.database.objects.Property;
 import com.akaita.fda.database.objects.Type;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
@@ -26,7 +25,6 @@ public class DaoFactory extends Application {
     private Dao<Genre, String> genres = null;
     private Dao<Album, Long> albums = null;
     private Dao<Type, String> types = null;
-    private Dao<Property, String> properties = null;
 
     private static DaoFactory instance = null;
 
@@ -82,14 +80,6 @@ public class DaoFactory extends Application {
         }
         return types;
     }
-
-    public Dao<Property, String> getPropertyDao() throws SQLException {
-        if (properties == null) {
-            properties = databaseHelper.getDao(Property.class);
-        }
-        return properties;
-    }
-
 
     @Override
     public void onTerminate() {

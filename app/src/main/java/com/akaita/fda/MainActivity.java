@@ -1,5 +1,6 @@
 package com.akaita.fda;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.akaita.fda.database.DaoFactory;
 import com.akaita.fda.database.objects.Artist;
+import com.akaita.fda.imagedownload.SetImage;
 
 import java.sql.SQLException;
 
@@ -26,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements ArtistFragment.On
 
         showUpdateInstructions(!isDataAvailable());
         checkNetworkAccess();
+
+        setConfiguration();
 
         showFragmentArtists();
     }
@@ -43,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements ArtistFragment.On
 
         switch (id) {
             case R.id.action_settings:
+                Intent i = new Intent(this, PreferencesActivity.class);
+                startActivity(i);
                 break;
             case android.R.id.home:
                 onBackPressed();
@@ -140,5 +146,11 @@ public class MainActivity extends AppCompatActivity implements ArtistFragment.On
         } else {
             Log.i(getClass().toString(), "Network access: YES");
         }
+    }
+
+    private void setConfiguration() {
+        PreferencesManager preferencesManager = new PreferencesManager(this);
+        SetImage.setMethod(preferencesManager.isCacheImageEnabled() ? SetImage.Method.CACHE : SetImage.Method.ASYNCTASK);
+        SetImage.setCacheIndicatorEnabled(preferencesManager.isCacheImageIndicatorEnabled());
     }
 }

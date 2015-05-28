@@ -9,7 +9,6 @@ import com.akaita.fda.database.objects.Artist;
 import com.akaita.fda.database.objects.ArtistAlbum;
 import com.akaita.fda.database.objects.ArtistGenre;
 import com.akaita.fda.database.objects.Genre;
-import com.akaita.fda.database.objects.Property;
 import com.akaita.fda.database.objects.Type;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
@@ -38,7 +37,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Genre.class);
             TableUtils.createTable(connectionSource, Album.class);
             TableUtils.createTable(connectionSource, Type.class);
-            TableUtils.createTable(connectionSource, Property.class);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -59,7 +57,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, Genre.class, true);
             TableUtils.dropTable(connectionSource, Album.class, true);
             TableUtils.dropTable(connectionSource, Type.class, true);
-            TableUtils.dropTable(connectionSource, Property.class, true);
             onCreate(db, connectionSource);
         } catch (SQLException e) {
             throw new RuntimeException(e);

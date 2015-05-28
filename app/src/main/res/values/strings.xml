@@ -10,4 +10,11 @@
     <string name="network_access_error">No Internet access found</string>
     <string name="cant_update_nor_download_images">Won\'t download updates nor images</string>
     <string name="no_new_version">Already in the last version</string>
+
+    <string name="preftit_last_modified">Database version</string>
+    <string name="prefsumm_last_modified">Last published database</string>
+    <string name="preftit_cache_image_enable">Cache images</string>
+    <string name="prefsumm_cache_image_enable">Caching images will help avoid redownloading images</string>
+    <string name="preftit_cache_image_indicator">Show cached images indicator</string>
+    <string name="prefsumm_cache_image_indicator">Show indicator on top-right for downloaded(red), fromDisk(blue), fromMemory(green)</string>
 </resources>

@@ -185,7 +185,8 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
             URL url1 = null;
             try {
                 url1 = new URL(MainActivity.URL_1);
-                new UpdateDatabaseTask(this).execute(url1);
+                PreferencesManager preferencesManager = new PreferencesManager(getActivity());
+                new UpdateDatabaseTask(this, preferencesManager).execute(url1);
             } catch (MalformedURLException e) {
                 Log.e(getClass().toString(), "Malformed URL: " + e.getMessage());
             }

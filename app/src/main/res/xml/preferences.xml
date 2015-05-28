@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="@string/pref_last_modified_time"
+        android:title="@string/preftit_last_modified"
+        android:summary="@string/prefsumm_last_modified"
+        android:defaultValue="0"
+        android:editable="false"
+        android:enabled="false" />
+    <CheckBoxPreference
+        android:key="@string/pref_cache_image_enable"
+        android:title="@string/preftit_cache_image_enable"
+        android:summary="@string/prefsumm_cache_image_enable"
+        android:defaultValue="true"
+        android:disableDependentsState="false" />
+    <CheckBoxPreference
+        android:key="@string/pref_cache_image_indicator"
+        android:title="@string/preftit_cache_image_indicator"
+        android:summary="@string/prefsumm_cache_image_indicator"
+        android:defaultValue="false"
+        android:dependency="@string/pref_cache_image_enable" />
+</PreferenceScreen>

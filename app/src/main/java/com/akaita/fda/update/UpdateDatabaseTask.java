@@ -1,27 +1,30 @@
 package com.akaita.fda.update;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.akaita.fda.database.PropertyManager;
+import com.akaita.fda.PreferencesManager;
+import com.akaita.fda.R;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Created by mikel on 20/05/2015.
  */
 public class UpdateDatabaseTask extends AsyncTask<URL, Integer, Boolean> {
+    private PreferencesManager mPreferencesManager;
     public OnUpdateDatabaseFinishListener mOnUpdateDatabaseFinishListener;
 
-    public UpdateDatabaseTask (OnUpdateDatabaseFinishListener onUpdateDatabaseFinishListener){
+    public UpdateDatabaseTask (OnUpdateDatabaseFinishListener onUpdateDatabaseFinishListener, PreferencesManager preferencesManager){
         this.mOnUpdateDatabaseFinishListener = onUpdateDatabaseFinishListener;
+        this.mPreferencesManager = preferencesManager;
     }
 
     protected Boolean doInBackground(URL... urls) {
@@ -41,11 +44,11 @@ public class UpdateDatabaseTask extends AsyncTask<URL, Integer, Boolean> {
     }
 
     protected void onProgressUpdate(Integer... progress) {
-        Logger.getLogger(getClass().getName()).log(Level.INFO, "Progress " + progress[0]);
+        Log.i(getClass().toString(), "Progress: " + progress[0]);
     }
 
     protected void onPostExecute(Boolean result) {
-        Logger.getLogger(getClass().getName()).log(Level.INFO, result ? "New data downloaded" : "No new data to download");
+        Log.i(getClass().toString(), result ? "New data downloaded" : "No new data to download");
         mOnUpdateDatabaseFinishListener.onUpdateDatabaseFinish(result);
     }
 
@@ -69,14 +72,14 @@ public class UpdateDatabaseTask extends AsyncTask<URL, Integer, Boolean> {
             c.setConnectTimeout(10000);
             c.setReadTimeout(10000);
 
-            long lastModifiedStored = PropertyManager.getLastModifiedDate();
+            long lastModifiedStored =  this.mPreferencesManager.getLastModifiedDate();
             long lastModifiedOnline = c.getLastModified();
             if ( lastModifiedOnline != 0
                     && lastModifiedStored != lastModifiedOnline ) {
                 Log.d(getClass().toString(), "Online database: NEW version");
                 Log.d(getClass().toString(), "Online database timestamp: " + String.valueOf(lastModifiedOnline));
                 updateData2(c);
-                PropertyManager.setLastModifiedDate(lastModifiedOnline);
+                this.mPreferencesManager.setLastModifiedDate(lastModifiedOnline);
                 return true;
             } else {
                 Log.d(getClass().toString(), "Online database: OLD version");

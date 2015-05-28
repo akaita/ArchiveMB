@@ -21,6 +21,7 @@ public class SetImage {
     }
 
     private static Method method = Method.CACHE;
+    private static boolean indicatorEnabled = false;
 
     private SetImage(){
 
@@ -55,7 +56,7 @@ public class SetImage {
 
                             }
                         });
-                Picasso.with(context).setIndicatorsEnabled(true);
+                Picasso.with(context).setIndicatorsEnabled(indicatorEnabled);
                 break;
         }
     }
@@ -67,4 +68,13 @@ public class SetImage {
     public static Method getMethod() {
         return method;
     }
+
+    public static void setCacheIndicatorEnabled(boolean enable) {
+        indicatorEnabled = enable;
+    }
+
+    public static boolean isCacheIndicatorEnabled() {
+        return indicatorEnabled;
+    }
+
 }
