@@ -1,9 +1,11 @@
 package com.akaita.fda;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +21,8 @@ import java.sql.SQLException;
 public class MainActivity extends AppCompatActivity implements ArtistFragment.OnArtistSelectedListener, ArtistFragment.OnArtistListUpdatedListener {
     public static final String TAG_MAIN_FRAGMENT = "main_fragment";
     public static final String TAG_ALBUM_FRAGMENT = "album_fragment";
+
+    private Menu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements ArtistFragment.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        this.mMenu = menu;
         return true;
     }
 
@@ -95,6 +100,10 @@ public class MainActivity extends AppCompatActivity implements ArtistFragment.On
 
         // Commit the transaction
         transaction.commit();
+
+        //remove search action
+        //(seems like there's some problem with the current AppCompat version, so I have to do this here :( )
+        this.mMenu.removeItem(R.id.action_search);
     }
 
     @Override

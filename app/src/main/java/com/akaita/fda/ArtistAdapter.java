@@ -107,9 +107,8 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistThumbViewHolder> {
     }
 
     public void removeAll() {
-        for (int i=0 ; i<this.mArtistList.size() ; i++){
-            remove(i);
-        }
+        this.mArtistList = new ArrayList<>();
+        notifyDataSetChanged();
     }
 
     public static String concatenate(List<Genre> list, String separator) {

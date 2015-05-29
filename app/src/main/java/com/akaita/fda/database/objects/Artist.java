@@ -17,11 +17,12 @@ import java.util.List;
 @DatabaseTable(tableName = "artist")
 public class Artist {
     public static final String ID_FIELD_NAME = "id";
+    public static final String NAME_FIELD_NAME = "name";
 
     @DatabaseField(id = true, columnName = ID_FIELD_NAME)
     private long id;
 
-    @DatabaseField
+    @DatabaseField(columnName = NAME_FIELD_NAME)
     private String name;
 
     @DatabaseField

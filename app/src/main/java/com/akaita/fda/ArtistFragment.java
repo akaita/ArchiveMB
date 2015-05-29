@@ -6,12 +6,17 @@ package com.akaita.fda;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -23,6 +28,7 @@ import com.akaita.fda.update.UpdateDatabaseTask;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistItemSelectedListener, SwipeRefreshLayout.OnRefreshListener, UpdateDatabaseTask.OnUpdateDatabaseFinishListener {
@@ -38,6 +44,7 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
     private ArtistAdapter mArtistAdapter;
     private String mGenreId;
     private SwipeRefreshLayout mSwipeLayout;
+    private String mArtistNameFilter;
 
     public ArtistFragment() {
     }
@@ -71,6 +78,26 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
     }
 
     @Override
+    public void onCreateOptionsMenu (Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_artists, menu);
+        MenuItem searchViewItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchViewItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String arg0) {
+                setNewArtistNameFilter(arg0);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String arg0) {
+                setNewArtistNameFilter(arg0);
+                return false;
+            }
+        });
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.mView = inflater.inflate(R.layout.fragment_artist, container, false);
@@ -84,6 +111,8 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
         loadFirstItemBatch();
 
         setSwipeRefreshListener();
+
+        setHasOptionsMenu(true);
 
         return this.mView;
     }
@@ -134,7 +163,7 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
                 int totalItemCount = recyclerView.getLayoutManager().getItemCount();
 
                 int lastVisibleItem = 0;
-                switch (mViewType){
+                switch (mViewType) {
                     case THUMB:
                         lastVisibleItem = JavaUtils.findMax(
                                 ((StaggeredGridLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPositions(null));
@@ -156,10 +185,15 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
     }
 
     private void loadMoreItems() {
-        List<Artist> newArtistList = null;
+        List<Artist> newArtistList = new ArrayList<>();
         try {
             PreferencesManager preferencesManager = new PreferencesManager(getActivity());
-            newArtistList = RangedQuery.getArtistRangeByGenre(mArtistAdapter.getItemCount(), preferencesManager.getPageSize(), this.mGenreId);
+            if (this.mArtistNameFilter==null
+                    || this.mArtistNameFilter.isEmpty()) {
+                newArtistList = RangedQuery.getArtistRangeByGenre(mArtistAdapter.getItemCount(), preferencesManager.getPageSize(), this.mGenreId);
+            } else {
+                newArtistList = RangedQuery.getArtistRangeByGenreByName(mArtistAdapter.getItemCount(), preferencesManager.getPageSize(), this.mGenreId, this.mArtistNameFilter);
+            }
         } catch (SQLException e) {
             Log.e(getClass().toString(), "SQLException (" + e.getSQLState() + "): " + e.getMessage());
         }
@@ -208,4 +242,9 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnArtistIt
         this.mSwipeLayout.setRefreshing(false);
     }
 
+    private void setNewArtistNameFilter(String filter) {
+        this.mArtistNameFilter = filter;
+        this.mArtistAdapter.removeAll();
+        loadFirstItemBatch();
+    }
 }
