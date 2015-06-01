@@ -5,6 +5,11 @@ Just an small Android app which takes some JSON data about artists and albums an
 
 Should perfectly work on Android 2.3+ devices, and most probably even on lower versions.
 
+Releases (/release directory)
+--------
+0.1.0 : Initial release
+
+
 Included features
 -------------------------
 
